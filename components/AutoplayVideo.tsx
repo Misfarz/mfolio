@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 interface AutoplayVideoProps {
   src: string;
   className?: string;
+  containerClassName?: string;
   loop?: boolean;
   muted?: boolean;
   showSoundButton?: boolean;
@@ -13,6 +14,7 @@ interface AutoplayVideoProps {
 export default function AutoplayVideo({
   src,
   className = "h-full w-full object-cover",
+  containerClassName = "absolute inset-0 h-full w-full",
   loop = true,
   muted = true,
   showSoundButton = true,
@@ -25,8 +27,9 @@ export default function AutoplayVideo({
     const video = videoRef.current;
     if (!video) return;
 
-    // Ensure muted initially for browser autoplay policy compliance
+    // Ensure muted initially for browser autoplay policy compliance (critical for iOS Safari)
     video.muted = isMuted;
+    video.defaultMuted = isMuted;
 
     // Scroll-based Autoplay Observer
     const observer = new IntersectionObserver(
@@ -43,6 +46,7 @@ export default function AutoplayVideo({
                 .catch(() => {
                   // If browser blocked sound-enabled autoplay, force muted and retry
                   video.muted = true;
+                  video.defaultMuted = true;
                   setIsMuted(true);
                   video.play().then(() => setIsPlaying(true)).catch(() => {});
                 });
@@ -55,7 +59,7 @@ export default function AutoplayVideo({
         });
       },
       {
-        threshold: 0.2, // Triggers as soon as 20% of the video enters viewport
+        threshold: 0.15, // Triggers as soon as 15% of the video enters viewport
       }
     );
 
@@ -71,6 +75,7 @@ export default function AutoplayVideo({
     if (!videoRef.current) return;
     const nextMuted = !isMuted;
     videoRef.current.muted = nextMuted;
+    videoRef.current.defaultMuted = nextMuted;
     setIsMuted(nextMuted);
     if (videoRef.current.paused) {
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
@@ -83,23 +88,27 @@ export default function AutoplayVideo({
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     } else {
       videoRef.current.pause();
-      setIsPlaying(false);
     }
   };
 
+  if (!src) return null;
+
   return (
     <div
-      className="relative h-full w-full cursor-pointer select-none overflow-hidden"
+      className={`cursor-pointer select-none overflow-hidden ${containerClassName}`}
       onClick={togglePlay}
     >
       <video
         ref={videoRef}
         src={src}
+        autoPlay
         loop={loop}
         muted={isMuted}
         playsInline
-        preload="metadata"
+        preload="auto"
         className={className}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
       />
 
       {/* Floating Sound Toggle Button */}
@@ -138,3 +147,4 @@ export default function AutoplayVideo({
     </div>
   );
 }
+

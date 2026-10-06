@@ -64,7 +64,7 @@ const SERVICES = [
   },
   {
     id: "design",
-    title: "Graphical",
+    title: "Graphic",
     sub: "designer",
     bg: "#0a1a3a",
     fg: "#f6efe0",
@@ -265,14 +265,15 @@ export default function HomePage() {
         {/* ------------------------------------------------------------ */}
         <div className="relative w-full overflow-hidden bg-black">
           {/* VIDEO SLOT 1 (Featured Hero Video - Fully contained inside wavy frame) */}
-          <div className="group relative aspect-[16/9] min-h-[520px] w-full sm:min-h-[640px] md:min-h-[760px] lg:min-h-[860px] bg-black flex items-center justify-center overflow-hidden">
+          <div className="group relative aspect-[16/9] min-h-[520px] w-full sm:min-h-[640px] md:min-h-[760px] lg:min-h-[860px] bg-black overflow-hidden">
             {/* Background Video */}
             <AutoplayVideo
               src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.hero)}
               loop
               muted
               showSoundButton={true}
-              className="absolute inset-0 h-full w-full object-cover z-0"
+              containerClassName="absolute inset-0 h-full w-full z-0"
+              className="h-full w-full object-cover"
             />
 
             {/* Top Cream Wave cutting directly over the video (Zero gap / fully contained) */}
