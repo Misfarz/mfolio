@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Anton, Pacifico, Plus_Jakarta_Sans } from "next/font/google";
 import { getCloudinaryVideoUrl } from "@/lib/cloudinary";
 import AutoplayVideo from "@/components/AutoplayVideo";
+import GraphicDesignsSection, { GraphicDesignItem } from "@/components/GraphicDesignsSection";
+import ConnectButton from "@/components/ConnectButton";
 
 // ==============================================================
 // CLOUDINARY VIDEOS CONFIGURATION
@@ -22,6 +24,79 @@ export const CLOUDINARY_VIDEOS = {
   slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791303926/slot_4.mov", // Paste Cloudinary URL for Video 7 (Portrait)
 };
 
+// ==============================================================
+// GRAPHIC DESIGNS CONFIGURATION
+// You can replace the src paths with your Cloudinary image URLs or local files!
+// ==============================================================
+export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
+  {
+    id: "1",
+    title: "Brutalist Swiss Editorial",
+    category: "Posters & Covers",
+    subtitle: "Experimental Typography Poster",
+    tool: "Photoshop & Illustrator",
+    year: "2026",
+    src: "/designs/design-1.jpg",
+    description:
+      "High-contrast editorial typography poster exploring Swiss international style, geometric abstraction, and bold chromatic layout.",
+  },
+  {
+    id: "2",
+    title: "High-Energy Cyber Visuals",
+    category: "Thumbnails",
+    subtitle: "Cinematic YouTube Key Art",
+    tool: "Photoshop & After Effects",
+    year: "2026",
+    src: "/designs/design-2.jpg",
+    description:
+      "Dynamic YouTube thumbnail and digital cover featuring dramatic dual-tone neon rim lighting, stylized character silhouette, and high-CTR title treatments.",
+  },
+  {
+    id: "3",
+    title: "Aurora Design Studio",
+    category: "Brand Identity",
+    subtitle: "Luxury Monogram & Stationery",
+    tool: "Illustrator & InDesign",
+    year: "2025",
+    src: "/designs/design-3.jpg",
+    description:
+      "Complete corporate identity system including embossed copper-foil business cards, letterheads, and minimalist monogram logo mark.",
+  },
+  {
+    id: "4",
+    title: "Harmonic Chaos",
+    category: "Posters & Covers",
+    subtitle: "Avant-Garde Vinyl Album Art",
+    tool: "Cinema 4D & Photoshop",
+    year: "2026",
+    src: "/designs/design-4.jpg",
+    description:
+      "Experimental album packaging showcasing iridescent metallic fluid ribbons, holographic ripple textures, and cosmic nocturnal atmosphere.",
+  },
+  {
+    id: "5",
+    title: "Nightfall: The Eclipse Protocol",
+    category: "Posters & Covers",
+    subtitle: "Cinematic Thriller Movie Poster",
+    tool: "Photoshop & Lightroom",
+    year: "2025",
+    src: "/designs/design-5.jpg",
+    description:
+      "Theatrical key art poster with dramatic sunset rim lighting, duotone color grading, billing credits block, and gritty analog film grain.",
+  },
+  {
+    id: "6",
+    title: "Creative Flow Kinetic Poster",
+    category: "Typography",
+    subtitle: "Risograph Retro Pop Art",
+    tool: "Illustrator & Procreate",
+    year: "2026",
+    src: "/designs/design-6.jpg",
+    description:
+      "Playful cut-paper typographic poster with halftones, custom lettering curves, risograph textures, and energetic visual motion.",
+  },
+];
+
 const display = Anton({
   weight: "400",
   subsets: ["latin"],
@@ -39,6 +114,7 @@ const sans = Plus_Jakarta_Sans({
 
 const NAV = [
   { label: "Videos", href: "#videos" },
+  { label: "Designs", href: "#designs" },
   { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
@@ -602,14 +678,23 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================== */}
-      {/* 5. CONTACT / FOOTER */}
+      {/* 5. GRAPHIC DESIGNS SECTION */}
+      {/* ============================================================== */}
+      <GraphicDesignsSection
+        designs={GRAPHIC_DESIGNS}
+        displayClassName={display.className}
+        scriptClassName={script.className}
+      />
+
+      {/* ============================================================== */}
+      {/* 6. CONTACT / FOOTER */}
       {/* ============================================================== */}
       <footer
         id="contact"
-        style={{ background: "#0a1424" }}
+        style={{ background: "#f6efe0" }}
         className="relative z-10 scroll-mt-4"
       >
-        {/* Wave transition into dark footer */}
+        {/* Wave transition from cream graphic designs section into dark navy footer */}
         <svg
           aria-hidden
           viewBox="0 0 1440 120"
@@ -637,12 +722,10 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col items-center gap-4 sm:items-end">
-              <a
-                href="mailto:contact@misfar.com"
-                className="inline-block rounded-full bg-[#ff8a00] px-8 py-3 text-sm font-bold uppercase tracking-wider text-[#0050c8] transition-all hover:bg-[#f6efe0]"
-              >
-                Get In Touch
-              </a>
+              <ConnectButton
+                whatsappNumber="918136902028"
+                email="misfaryusaf@gmail.com"
+              />
               <span className="text-xs text-[#f6efe0]/60">
                 &copy; 2026 Mohd. Misfar &bull; All Rights Reserved
               </span>

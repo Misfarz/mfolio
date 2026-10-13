@@ -1,0 +1,215 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+
+export interface GraphicDesignItem {
+  id: string;
+  title: string;
+  category: "Thumbnails" | "Posters & Covers" | "Brand Identity" | "Typography";
+  subtitle: string;
+  tool: string;
+  year: string;
+  src: string;
+  description: string;
+}
+
+interface GraphicDesignsSectionProps {
+  designs: GraphicDesignItem[];
+  displayClassName: string;
+  scriptClassName: string;
+}
+
+export default function GraphicDesignsSection({
+  designs,
+  displayClassName,
+  scriptClassName,
+}: GraphicDesignsSectionProps) {
+  const [selectedDesign, setSelectedDesign] = useState<GraphicDesignItem | null>(null);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!selectedDesign) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedDesign(null);
+      } else if (e.key === "ArrowRight") {
+        const currentIndex = designs.findIndex((d) => d.id === selectedDesign.id);
+        const nextIndex = (currentIndex + 1) % designs.length;
+        setSelectedDesign(designs[nextIndex]);
+      } else if (e.key === "ArrowLeft") {
+        const currentIndex = designs.findIndex((d) => d.id === selectedDesign.id);
+        const prevIndex = (currentIndex - 1 + designs.length) % designs.length;
+        setSelectedDesign(designs[prevIndex]);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedDesign, designs]);
+
+  return (
+    <section id="designs" className="relative scroll-mt-4 bg-[#f6efe0] text-[#0a1a3a]">
+      {/* Top Transition Wave from preceding Obsidian Video Section (#0a1424) */}
+      <div
+        className="relative -mt-1 w-full overflow-hidden leading-none"
+        style={{ background: "#0a1424" }}
+      >
+        <svg
+          aria-hidden
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          className="block h-16 w-full sm:h-20 md:h-28 lg:h-36"
+        >
+          <path
+            d="M0 60 C240 0 480 120 760 70 C1040 20 1240 100 1440 40 L1440 120 L0 120 Z"
+            fill="#f6efe0"
+          />
+        </svg>
+      </div>
+
+      {/* Header Container: Minimal Typography Lockup + Text-Only 4K */}
+      <div className="relative px-6 pt-8 pb-10 sm:px-12 sm:pt-12 sm:pb-14 md:px-16 lg:px-24">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          {/* Title Lockup */}
+          <div className="relative leading-none select-none">
+            {/* Line 1: Desi + gns */}
+            <div className="flex items-baseline">
+              <span
+                className={`${displayClassName} text-6xl uppercase tracking-tight text-[#0a1a3a] sm:text-7xl md:text-8xl lg:text-9xl`}
+              >
+                Desi
+              </span>
+              <span
+                className={`${scriptClassName} -ml-3 sm:-ml-5 md:-ml-7 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-[#ff8a00] drop-shadow-sm`}
+              >
+                gns
+              </span>
+            </div>
+
+            {/* Line 2: By + Me */}
+            <div className="-mt-2 sm:-mt-4 md:-mt-6 flex items-baseline">
+              <span
+                className={`${displayClassName} text-6xl uppercase tracking-tight text-[#0a1a3a] sm:text-7xl md:text-8xl lg:text-9xl`}
+              >
+                By
+              </span>
+              <span
+                className={`${scriptClassName} -ml-2 sm:-ml-4 md:-ml-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-[#0050c8] drop-shadow-sm`}
+              >
+                Me
+              </span>
+            </div>
+          </div>
+
+          {/* 4K Minimal Text Only (No border, no box) */}
+          <div className="select-none pb-1 sm:pb-3 text-left sm:text-right">
+            <span
+              className={`${displayClassName} block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-[#0a1a3a] leading-none tracking-tight`}
+            >
+              4K
+            </span>
+            <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[#0a1a3a]/60">
+              Ultra Quality
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Photos Grid - Centered 2 rows of 3 columns with elegant whitespaces and smaller slots for superior quality */}
+      <div className="relative mx-auto max-w-5xl px-6 pb-20 sm:px-10 sm:pb-28 md:px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+          {designs.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => setSelectedDesign(item)}
+              className="group relative aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl bg-[#0f172a] shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
+            >
+              <Image
+                src={item.src}
+                alt={item.title || "Graphic Design"}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                priority={item.id === "1" || item.id === "2"}
+              />
+
+              {/* Subtle hover overlay for micro-interaction */}
+              <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/15" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Minimal Lightbox Modal */}
+      {selectedDesign && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 sm:p-8 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setSelectedDesign(null)}
+        >
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={() => setSelectedDesign(null)}
+            aria-label="Close modal"
+            className="absolute top-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-[#ff8a00] hover:text-[#0a1a3a]"
+          >
+            <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+          </button>
+
+          {/* Previous button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              const currentIndex = designs.findIndex((d) => d.id === selectedDesign.id);
+              const prevIndex = (currentIndex - 1 + designs.length) % designs.length;
+              setSelectedDesign(designs[prevIndex]);
+            }}
+            aria-label="Previous artwork"
+            className="absolute left-4 sm:left-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-[#ff8a00] hover:text-[#0a1a3a]"
+          >
+            <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+          </button>
+
+          {/* Next button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              const currentIndex = designs.findIndex((d) => d.id === selectedDesign.id);
+              const nextIndex = (currentIndex + 1) % designs.length;
+              setSelectedDesign(designs[nextIndex]);
+            }}
+            aria-label="Next artwork"
+            className="absolute right-4 sm:right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-[#ff8a00] hover:text-[#0a1a3a]"
+          >
+            <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
+          </button>
+
+          {/* Image Container */}
+          <div
+            className="relative h-full max-h-[85vh] w-full max-w-5xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={selectedDesign.src}
+              alt={selectedDesign.title || "Graphic Design"}
+              fill
+              className="object-contain"
+              sizes="90vw"
+              priority
+            />
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
