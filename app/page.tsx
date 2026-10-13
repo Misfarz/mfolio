@@ -19,7 +19,7 @@ export const CLOUDINARY_VIDEOS = {
   // Videos 5, 6, 7: Portrait/Vertical Slots (Slots 05, 06, 07)
   slot5: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910051/slot_00.mov", // Paste Cloudinary URL for Video 5 (Portrait)
   slot6: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910063/slot_66.mov", // Paste Cloudinary URL for Video 6 (Portrait)
-  slot7: "", // Paste Cloudinary URL for Video 7 (Portrait)
+  slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791303926/slot_4.mov", // Paste Cloudinary URL for Video 7 (Portrait)
 };
 
 const display = Anton({
