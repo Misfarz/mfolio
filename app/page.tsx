@@ -16,9 +16,10 @@ export const CLOUDINARY_VIDEOS = {
   slot3: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300961/slot_2.mov", // Paste Cloudinary URL for Video 3 (Portrait)
   slot4: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791305821/jifan.mov", // Paste Cloudinary URL for Video 4 (Portrait)
 
-  // Videos 5, 6: Portrait/Vertical Slots (Slots 05, 06)
+  // Videos 5, 6, 7: Portrait/Vertical Slots (Slots 05, 06, 07)
   slot5: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910051/slot_00.mov", // Paste Cloudinary URL for Video 5 (Portrait)
   slot6: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910063/slot_66.mov", // Paste Cloudinary URL for Video 6 (Portrait)
+  slot7: "", // Paste Cloudinary URL for Video 7 (Portrait)
 };
 
 const display = Anton({
@@ -470,12 +471,12 @@ export default function HomePage() {
         </div>
 
         {/* ------------------------------------------------------------ */}
-        {/* PART 3 (FROM 1ST IMAGE): 2 VERTICAL VIDEOS SIDE-BY-SIDE */}
+        {/* PART 3: 3 VERTICAL VIDEOS SIDE-BY-SIDE (ROW 2) */}
         {/* ------------------------------------------------------------ */}
         <div className="relative w-full bg-[#0a1424] px-0 py-0">
-          {/* 2 Side-by-Side Vertical Videos - Flush with no gap, no rounded corners, no borders */}
-          <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
-            {/* VIDEO SLOT 5 (Portrait Video - Left) */}
+          {/* 3 Side-by-Side Vertical Videos - Flush with no gap, no rounded corners, no borders */}
+          <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-0 w-full">
+            {/* VIDEO SLOT 5 (Portrait Video 1) */}
             <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
               {CLOUDINARY_VIDEOS.slot5 ? (
                 <AutoplayVideo
@@ -514,7 +515,7 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* VIDEO SLOT 6 (Portrait Video - Right) */}
+            {/* VIDEO SLOT 6 (Portrait Video 2 - Center) */}
             <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
               {CLOUDINARY_VIDEOS.slot6 ? (
                 <AutoplayVideo
@@ -544,6 +545,45 @@ export default function HomePage() {
                     </span>
                     <span className="text-[11px] text-white/70">
                       Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot6
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
+                    4K Vertical
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* VIDEO SLOT 7 (Portrait Video 3 - Right) */}
+            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
+              {CLOUDINARY_VIDEOS.slot7 ? (
+                <AutoplayVideo
+                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot7)}
+                  loop
+                  muted
+                  showSoundButton={true}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <>
+                  <div
+                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle at 50% 50%, rgba(255, 138, 0, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%)",
+                    }}
+                  />
+                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
+                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#ff8a00] text-[#0a1a3a] shadow-lg">
+                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
+                      Video Slot 07
+                    </span>
+                    <span className="text-[11px] text-white/70">
+                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot7
                     </span>
                   </div>
                   <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
