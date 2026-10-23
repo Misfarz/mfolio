@@ -89,11 +89,11 @@ const services = [
 
 const verticalVideos = [
   { id: "02", label: "Adidas Commercial", sub: "Motion & Rhythm", src: CLOUDINARY_VIDEOS.slot2 },
-  { id: "03", label: "Effort Narrative", sub: "Color Science", src: CLOUDINARY_VIDEOS.slot3 },
-  { id: "04", label: "Short Film Cut", sub: "Character Narrative", src: CLOUDINARY_VIDEOS.slot4 },
-  { id: "05", label: "Brand Narrative", sub: "Dynamic Flow", src: CLOUDINARY_VIDEOS.slot5 },
-  { id: "06", label: "Creative Montage", sub: "Kinetic Pace", src: CLOUDINARY_VIDEOS.slot6 },
-  { id: "07", label: "Visual Storytelling", sub: "High Contrast", src: CLOUDINARY_VIDEOS.slot7 },
+  { id: "03", label: "Effort Narrative", sub: "Story Telling", src: CLOUDINARY_VIDEOS.slot3 },
+  { id: "04", label: "Short Film Cut", sub: "Aesthetics", src: CLOUDINARY_VIDEOS.slot4 },
+  { id: "05", label: "Brand Narrative", sub: "Frames", src: CLOUDINARY_VIDEOS.slot5 },
+  { id: "06", label: "Creative Montage", sub: "Color Science", src: CLOUDINARY_VIDEOS.slot6 },
+  { id: "07", label: "Visual Storytelling", sub: "Cinematic.", src: CLOUDINARY_VIDEOS.slot7 },
 ];
 
 /* =====================================================================
