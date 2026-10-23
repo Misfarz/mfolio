@@ -9,7 +9,7 @@ import { getCloudinaryVideoUrl } from "@/lib/cloudinary";
    ===================================================================== */
 export const CLOUDINARY_VIDEOS = {
   // Video 1: Featured Showreel (Slot 01)
-  hero: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300389/hero2.mov",
+  hero: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1792777369/kinetic_edit.mov",
 
   // Videos 2, 3, 4: Portrait / Vertical Slots
   slot2: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1792755524/adidas.mp4",
@@ -136,58 +136,6 @@ function Cursor() {
   );
 }
 
-function Float({
-  speed,
-  className,
-  children,
-}: {
-  speed: number;
-  className: string;
-  children: React.ReactNode;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const update = () => {
-      const parent = el.parentElement;
-      if (!parent) return;
-      const r = parent.getBoundingClientRect();
-      el.style.transform = `translate3d(0,${(r.top + r.height / 2 - window.innerHeight / 2) * speed
-        }px,0)`;
-    };
-    const on = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(update);
-    };
-    update();
-    addEventListener("scroll", on, { passive: true });
-    return () => removeEventListener("scroll", on);
-  }, [speed]);
-  return (
-    <div ref={ref} className={className}>
-      {children}
-    </div>
-  );
-}
-
-const Photo = ({
-  src,
-  className = "",
-  alt = "Portfolio Visual",
-}: {
-  src: string;
-  className?: string;
-  alt?: string;
-}) => (
-  <img
-    src={src}
-    alt={alt}
-    loading="lazy"
-    className={`rounded-[24px] bg-[#161616] object-cover shadow-2xl border border-[var(--line)] ${className}`}
-  />
-);
 
 const stroke = {
   fill: "none",
@@ -384,41 +332,23 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- Statement with floating photos & signature ---------- */}
-        <section className="flex flex-col items-center px-[4vw] pb-[10vw] pt-[6vw]">
+        {/* ---------- Statement & signature ---------- */}
+        <section className="flex flex-col items-center px-[4vw] pb-[8vw] pt-[6vw]">
           <div className="relative w-full">
-            <Float
-              speed={0.1}
-              className="absolute -top-[6vw] left-[16.2vw] z-10 hidden md:block"
-            >
-              <Photo src="/images/planet.jpg" className="h-[13vw] w-[17.4vw]" />
-            </Float>
-            <Float
-              speed={-0.14}
-              className="absolute -top-[11.6vw] left-[66.5vw] z-10 hidden md:block"
-            >
-              <Photo src="/images/car.jpg" className="h-[18.4vw] w-[17.4vw]" />
-            </Float>
-            <p className="f-xl mx-auto max-w-[82vw] text-center text-[7.4vw] leading-[0.84] md:text-[3.05vw]">
-              Freelance creative professional based in
-              <br className="hidden md:block" /> Kerala, India, guiding
-              <br className="hidden md:block" /> creators &amp; brands achieve their vision in
-              <br className="hidden md:block" /> video, UI/UX and frontend engineering.
+            <p className="f-xl mx-auto max-w-[84vw] text-center text-[6.8vw] leading-[0.88] md:text-[3.1vw] tracking-tight">
+              Crafting high-impact visual stories
+              <br className="hidden md:block" /> and refined digital interfaces —
+              <br className="hidden md:block" /> merging cinematic rhythm, bold direction,
+              <br className="hidden md:block" /> and modern web engineering.
             </p>
           </div>
 
           {/* Minimal Cursive Signature */}
           <div
-            className="mt-[3.6vw] select-none text-[clamp(56px,5.2vw,100px)] leading-none text-white/95"
+            className="mt-[3.6vw] select-none text-[clamp(60px,5.4vw,108px)] leading-none text-white/95"
             style={{ fontFamily: "'Mrs Saint Delafield', cursive" }}
           >
             Misfar
-          </div>
-
-          <div className="relative mt-[2.5vw] h-[13vw] w-[17.4vw] max-md:h-48 max-md:w-64">
-            <Float speed={0.06} className="absolute inset-0">
-              <Photo src="/images/gallery.jpg" className="h-full w-full" />
-            </Float>
           </div>
         </section>
 
