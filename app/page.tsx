@@ -45,10 +45,40 @@ const steps = [
 ];
 
 const experience = [
-  { co: "Decathlon", role: "Media content creator", yr: "2023 - 2024" },
-  { co: "Frontend & UI/UX", role: "Frontend engineer & UI designer", yr: "2023 - Present" },
-  { co: "Freelance", role: "Video editor & colorist", yr: "2023 - Present" },
+  {
+    co: "Freelance",
+    role: "Video Editor, UI & Graphic Designer",
+    loc: "Tirur, Kerala",
+    yr: "March 2025 - Present",
+    highlights: [
+      "Created and edited engaging video content including reels and promotional videos for social media platforms.",
+      "Designed UI layouts, social media creatives, and branding materials aligned with client requirements.",
+      "Managed end-to-end project execution from concept development to final delivery within deadlines.",
+      "Collaborated with clients to refine visual identity and improve content engagement.",
+    ],
+  },
+  {
+    co: "Hostup Cloud Technologies Pvt Limited",
+    role: "Frontend Developer Intern",
+    loc: "Bengaluru, Karnataka",
+    yr: "February 2024 - May 2024",
+    highlights: [
+      "Designed and developed responsive frontend interfaces using modern web technologies.",
+      "Converted UI designs into functional web pages with clean and structured code.",
+      "Assisted in optimizing website performance and improving user experience.",
+      "Collaborated with backend developers to integrate APIs and ensure seamless functionality.",
+    ],
+  },
 ];
+
+const education = {
+  institution: "Kristu Jayanti University",
+  degree: "Bachelor Of Computer Applications (BCA)",
+  loc: "Bengaluru, India",
+  yr: "Sept 2021 - June 2024",
+  grade: "GPA: 7.0 / 10.0",
+};
+
 
 const services = [
   { n: "01", t: "Videography & Editing", d: "Cinematic cuts, short-form reels, pacing & sound design" },
@@ -295,7 +325,7 @@ export default function Home() {
         {/* ---------- Info strip ---------- */}
         <section className="relative flex flex-col items-center gap-8 py-10 md:block md:h-[9.2vw] md:py-0">
           {[
-            { i: <PinIcon />, a: "Based in Kerala,", b: "India", x: "13.8%" },
+            { i: <PinIcon />, a: "Based in Kerala &", b: "Bengaluru, India", x: "13.8%" },
             { i: <GlobeIcon />, a: "Available all around", b: "Worldwide", x: "50%" },
             { i: <BadgeIcon />, a: "Video Editor &", b: "UI/UX (Frontend Engineer)", x: "86.2%" },
           ].map((s) => (
@@ -318,12 +348,13 @@ export default function Home() {
         {/* ---------- Intro ---------- */}
         <section id="about" className="grid px-[3.3vw] pb-[8vw] pt-[10vw] md:grid-cols-4 scroll-mt-6">
           <h2 className="f-xl text-[10.5vw] leading-[0.86] md:col-span-3 md:text-[5.2vw]">
-            I'm Mohd. Misfar<br className="hidden md:block" /> based in Kerala,<br className="hidden md:block" /> India.
+            I'm Mohd. Misfar<br className="hidden md:block" /> based in Kerala &amp;<br className="hidden md:block" /> Bengaluru, India.
           </h2>
           <p className="f-tx mt-8 max-w-[19rem] self-end pl-0 text-[clamp(16px,1.16vw,22px)] leading-[1.2] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.6vw]">
-            Focused on creating clean, engaging, and visually impactful digital experiences across video editing, cinematic color grading, and UI/UX frontend engineering.
+            Creative professional focused on video editing, graphic design, and frontend development. Crafting engaging video content, responsive interfaces, and visual branding for creators and brands worldwide.
           </p>
         </section>
+
 
         {/* ---------- Process (Interactive tab dots) ---------- */}
         <section className="pb-[12vw] max-md:px-[3.3vw] md:grid md:grid-cols-[47.6vw_1fr]">
@@ -492,30 +523,78 @@ export default function Home() {
 
         {/* ---------- Experience ---------- */}
         <section id="experience" className="grid px-[3.3vw] pb-[8vw] pt-[12vw] max-md:pt-[14vw] md:grid-cols-[36.4vw_1fr] scroll-mt-6">
-          <h2 className="f-xl text-[clamp(28px,2.25vw,44px)] leading-none max-md:mb-8">
-            Experience
-          </h2>
+          <div>
+            <h2 className="f-xl text-[clamp(28px,2.25vw,44px)] leading-none max-md:mb-8">
+              Experience
+            </h2>
+            <p className="f-tx mt-4 max-w-[20rem] text-[clamp(14px,1vw,17px)] text-[var(--mute)] hidden md:block">
+              Professional history across video production, UI &amp; graphic design, and responsive frontend engineering.
+            </p>
+          </div>
           <div className="tex md:-mr-[3.3vw] md:pr-[3.3vw]">
             {experience.map((e) => (
               <div
                 key={e.co + e.role}
-                className="flex flex-wrap items-start justify-between gap-6 border-t border-[var(--line)] pb-[3.4vw] pt-[3.9vw] max-md:pt-8"
+                className="border-t border-[var(--line)] pb-[3.5vw] pt-[3.5vw] max-md:py-8"
               >
-                <div>
-                  <h3 className="f-xl text-[clamp(24px,1.7vw,32px)] leading-none">
-                    {e.co}
-                  </h3>
-                  <p className="f-md mt-[2.4vw] max-w-[14em] text-[clamp(12px,0.86vw,16px)] uppercase leading-[1.2] text-[var(--mute)] max-md:mt-5">
-                    {e.role}
-                  </p>
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <h3 className="f-xl text-[clamp(24px,1.7vw,32px)] leading-none text-white">
+                      {e.co}
+                    </h3>
+                    <p className="f-md mt-[0.8vw] text-[clamp(13px,0.95vw,17px)] uppercase tracking-wide text-white/90 max-md:mt-2.5">
+                      {e.role}
+                    </p>
+                    <span className="f-md mt-1 block text-xs uppercase tracking-wider text-[var(--mute)]">
+                      {e.loc}
+                    </span>
+                  </div>
+                  <span className="f-md text-[clamp(12px,0.86vw,16px)] tracking-[.04em] text-[var(--mute)] whitespace-nowrap">
+                    {e.yr}
+                  </span>
                 </div>
-                <span className="f-md mt-[2.7vw] text-[clamp(12px,0.86vw,16px)] tracking-[.04em] text-[var(--mute)] max-md:mt-0">
-                  {e.yr}
-                </span>
+
+                {e.highlights && (
+                  <ul className="mt-[1.6vw] space-y-2.5 max-md:mt-4">
+                    {e.highlights.map((h, i) => (
+                      <li
+                        key={i}
+                        className="f-tx flex items-start gap-3 text-[clamp(13px,0.92vw,16px)] font-normal leading-[1.45] text-[var(--mute)]"
+                      >
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/50" />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
+
+            {/* Education Record */}
+            <div className="border-t border-[var(--line)] pb-[3.5vw] pt-[3.5vw] max-md:py-8">
+              <span className="f-md text-[11px] uppercase tracking-widest text-[#0ea5e9]">
+                Education
+              </span>
+              <div className="mt-2 flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <h3 className="f-xl text-[clamp(22px,1.5vw,28px)] leading-none text-white">
+                    {education.institution}
+                  </h3>
+                  <p className="f-md mt-[0.6vw] text-[clamp(13px,0.92vw,16px)] uppercase tracking-wide text-white/90 max-md:mt-2">
+                    {education.degree}
+                  </p>
+                  <span className="f-md mt-1 block text-xs uppercase tracking-wider text-[var(--mute)]">
+                    {education.loc} &bull; {education.grade}
+                  </span>
+                </div>
+                <span className="f-md text-[clamp(12px,0.86vw,16px)] tracking-[.04em] text-[var(--mute)] whitespace-nowrap">
+                  {education.yr}
+                </span>
+              </div>
+            </div>
           </div>
         </section>
+
         <Rule />
 
         {/* ---------- Services ---------- */}
