@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import AutoplayVideo from "@/components/AutoplayVideo";
 import { getCloudinaryVideoUrl } from "@/lib/cloudinary";
 
@@ -23,89 +22,9 @@ export const CLOUDINARY_VIDEOS = {
   slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791305821/jifan.mov",
 };
 
-export interface GraphicDesignItem {
-  id: string;
-  title: string;
-  category: "Thumbnails" | "Posters & Covers" | "Brand Identity" | "Typography";
-  subtitle: string;
-  tool: string;
-  year: string;
-  src: string;
-  description: string;
-}
-
-export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
-  {
-    id: "1",
-    title: "Brutalist Swiss Editorial",
-    category: "Posters & Covers",
-    subtitle: "Experimental Typography Poster",
-    tool: "Photoshop & Illustrator",
-    year: "2026",
-    src: "/designs/design-1.jpg",
-    description:
-      "High-contrast editorial typography poster exploring Swiss international style, geometric abstraction, and bold chromatic layout.",
-  },
-  {
-    id: "2",
-    title: "High-Energy Cyber Visuals",
-    category: "Thumbnails",
-    subtitle: "Cinematic YouTube Key Art",
-    tool: "Photoshop & After Effects",
-    year: "2026",
-    src: "/designs/design-2.jpg",
-    description:
-      "Dynamic digital cover featuring dramatic dual-tone rim lighting, character silhouette, and high-CTR title treatments.",
-  },
-  {
-    id: "3",
-    title: "Aurora Design Studio",
-    category: "Brand Identity",
-    subtitle: "Luxury Monogram & Stationery",
-    tool: "Illustrator & InDesign",
-    year: "2025",
-    src: "/designs/design-3.jpg",
-    description:
-      "Complete corporate identity system including embossed stationery, letterheads, and minimalist monogram logo mark.",
-  },
-  {
-    id: "4",
-    title: "Harmonic Chaos",
-    category: "Posters & Covers",
-    subtitle: "Avant-Garde Vinyl Album Art",
-    tool: "Cinema 4D & Photoshop",
-    year: "2026",
-    src: "/designs/design-4.jpg",
-    description:
-      "Experimental album packaging showcasing iridescent metallic fluid ribbons, holographic textures, and cosmic nocturnal atmosphere.",
-  },
-  {
-    id: "5",
-    title: "Nightfall: The Eclipse Protocol",
-    category: "Posters & Covers",
-    subtitle: "Cinematic Thriller Movie Poster",
-    tool: "Photoshop & Lightroom",
-    year: "2025",
-    src: "/designs/design-5.jpg",
-    description:
-      "Theatrical key art poster with dramatic sunset rim lighting, duotone color grading, billing credits block, and gritty analog film grain.",
-  },
-  {
-    id: "6",
-    title: "Creative Flow Kinetic Poster",
-    category: "Typography",
-    subtitle: "Risograph Retro Pop Art",
-    tool: "Illustrator & Procreate",
-    year: "2026",
-    src: "/designs/design-6.jpg",
-    description:
-      "Playful typographic poster with halftones, custom lettering curves, risograph textures, and energetic visual motion.",
-  },
-];
-
 const stats = [
   { n: "25+", l: "Projects done" },
-  { n: "5+", l: "Years of experience" },
+  { n: "2+", l: "Years of experience" },
   { n: "12+", l: "Recognitions" },
   { n: "98%", l: "Happy clients" },
 ];
@@ -117,30 +36,30 @@ const steps = [
   },
   {
     t: "Concept and direction",
-    d: "Moodboards, style frames, pacing references and rough cuts turn the plan into a clear visual direction you can react to before anything is finalized.",
+    d: "Moodboards, style frames, pacing references and interactive prototypes turn the plan into a clear visual direction you can react to before anything is finalized.",
   },
   {
     t: "Create and deliver",
-    d: "Shooting, editing, color grading and graphic design are finished to precision and delivered in every format you need for web, cinema and social media.",
+    d: "Shooting, editing, color grading, UI/UX and frontend engineering are finished to precision and delivered in every format you need for web, cinema and digital platforms.",
   },
 ];
 
 const experience = [
   { co: "Decathlon", role: "Media content creator", yr: "2023 - 2024" },
-  { co: "Freelance", role: "Video editor & colorist", yr: "2024 - Present" },
-  { co: "Studio Lab", role: "Graphic designer & artist", yr: "2022 - 2023" },
+  { co: "Frontend & UI/UX", role: "Frontend engineer & UI designer", yr: "2023 - Present" },
+  { co: "Freelance", role: "Video editor & colorist", yr: "2023 - Present" },
 ];
 
 const services = [
   { n: "01", t: "Videography & Editing", d: "Cinematic cuts, short-form reels, pacing & sound design" },
   { n: "02", t: "Color Grading", d: "DaVinci Resolve finishing, color science & film mood matching" },
   { n: "03", t: "Graphic Design", d: "High-CTR thumbnails, posters, brand marks & typography" },
-  { n: "04", t: "Motion Graphics", d: "Kinetic titles, animated overlays & logo reveals" },
+  { n: "04", t: "UI/UX (Frontend Engineer)", d: "Modern web interfaces, responsive design, React & Next.js engineering" },
 ];
 
 const verticalVideos = [
-  { id: "02", label: "Commercial Reel", sub: "Motion & Rhythm", src: CLOUDINARY_VIDEOS.slot2 },
-  { id: "03", label: "Cinematic Visuals", sub: "Color Science", src: CLOUDINARY_VIDEOS.slot3 },
+  { id: "02", label: "Adidas Commercial", sub: "Motion & Rhythm", src: CLOUDINARY_VIDEOS.slot2 },
+  { id: "03", label: "Effort Narrative", sub: "Color Science", src: CLOUDINARY_VIDEOS.slot3 },
   { id: "04", label: "Short Film Cut", sub: "Character Narrative", src: CLOUDINARY_VIDEOS.slot4 },
   { id: "05", label: "Brand Narrative", sub: "Dynamic Flow", src: CLOUDINARY_VIDEOS.slot5 },
   { id: "06", label: "Creative Montage", sub: "Kinetic Pace", src: CLOUDINARY_VIDEOS.slot6 },
@@ -205,8 +124,9 @@ function Float({
       const parent = el.parentElement;
       if (!parent) return;
       const r = parent.getBoundingClientRect();
-      el.style.transform = `translate3d(0,${(r.top + r.height / 2 - window.innerHeight / 2) * speed
-        }px,0)`;
+      el.style.transform = `translate3d(0,${
+        (r.top + r.height / 2 - window.innerHeight / 2) * speed
+      }px,0)`;
     };
     const on = () => {
       cancelAnimationFrame(raf);
@@ -315,27 +235,6 @@ function Hero() {
    ===================================================================== */
 export default function Home() {
   const [step, setStep] = useState(0);
-  const [selectedDesign, setSelectedDesign] = useState<GraphicDesignItem | null>(null);
-
-  // Lightbox keyboard navigation
-  useEffect(() => {
-    if (!selectedDesign) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedDesign(null);
-      } else if (e.key === "ArrowRight") {
-        const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
-        setSelectedDesign(GRAPHIC_DESIGNS[(cur + 1) % GRAPHIC_DESIGNS.length]);
-      } else if (e.key === "ArrowLeft") {
-        const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
-        setSelectedDesign(
-          GRAPHIC_DESIGNS[(cur - 1 + GRAPHIC_DESIGNS.length) % GRAPHIC_DESIGNS.length]
-        );
-      }
-    };
-    addEventListener("keydown", handleKeyDown);
-    return () => removeEventListener("keydown", handleKeyDown);
-  }, [selectedDesign]);
 
   return (
     <div className="tex relative min-h-screen overflow-x-clip text-white antialiased selection:bg-white selection:text-black">
@@ -353,7 +252,7 @@ export default function Home() {
         <header className="flex items-center justify-between px-[3.3vw] py-[0.8vw] max-md:py-3.5">
           <Clock />
 
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-8">
             <a
               href="#films"
               className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
@@ -361,16 +260,16 @@ export default function Home() {
               Films
             </a>
             <a
-              href="#designs"
-              className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
-            >
-              Visuals
-            </a>
-            <a
               href="#services"
               className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
             >
               Services
+            </a>
+            <a
+              href="#experience"
+              className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
+            >
+              Experience
             </a>
             <a
               href="#about"
@@ -398,7 +297,7 @@ export default function Home() {
           {[
             { i: <PinIcon />, a: "Based in Kerala,", b: "India", x: "13.8%" },
             { i: <GlobeIcon />, a: "Available all around", b: "Worldwide", x: "50%" },
-            { i: <BadgeIcon />, a: "Video editor &", b: "Graphic designer", x: "86.2%" },
+            { i: <BadgeIcon />, a: "Video Editor &", b: "UI/UX (Frontend Engineer)", x: "86.2%" },
           ].map((s) => (
             <div
               key={s.a}
@@ -422,7 +321,7 @@ export default function Home() {
             I'm Mohd. Misfar<br className="hidden md:block" /> based in Kerala,<br className="hidden md:block" /> India.
           </h2>
           <p className="f-tx mt-8 max-w-[19rem] self-end pl-0 text-[clamp(16px,1.16vw,22px)] leading-[1.2] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.6vw]">
-            Focused on creating clean, engaging, and visually impactful content across video editing, cinematic color grading, and graphic design.
+            Focused on creating clean, engaging, and visually impactful digital experiences across video editing, cinematic color grading, and UI/UX frontend engineering.
           </p>
         </section>
 
@@ -440,8 +339,9 @@ export default function Home() {
                 aria-selected={step === i}
                 aria-label={`Step ${i + 1}`}
                 onClick={() => setStep(i)}
-                className={`h-[11px] w-[11px] rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${step === i ? "bg-white scale-125" : "bg-[#333333] hover:bg-[#666666]"
-                  }`}
+                className={`h-[11px] w-[11px] rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${
+                  step === i ? "bg-white scale-125" : "bg-[#333333] hover:bg-[#666666]"
+                }`}
               />
             ))}
           </div>
@@ -462,19 +362,19 @@ export default function Home() {
               speed={0.1}
               className="absolute -top-[6vw] left-[16.2vw] z-10 hidden md:block"
             >
-              <Photo src="/designs/design-1.jpg" className="h-[13vw] w-[17.4vw]" />
+              <Photo src="/images/planet.jpg" className="h-[13vw] w-[17.4vw]" />
             </Float>
             <Float
               speed={-0.14}
               className="absolute -top-[11.6vw] left-[66.5vw] z-10 hidden md:block"
             >
-              <Photo src="/designs/design-2.jpg" className="h-[18.4vw] w-[17.4vw]" />
+              <Photo src="/images/car.jpg" className="h-[18.4vw] w-[17.4vw]" />
             </Float>
             <p className="f-xl mx-auto max-w-[82vw] text-center text-[7.4vw] leading-[0.84] md:text-[3.05vw]">
               Freelance creative professional based in
               <br className="hidden md:block" /> Kerala, India, guiding
               <br className="hidden md:block" /> creators &amp; brands achieve their vision in
-              <br className="hidden md:block" /> video, color &amp; design.
+              <br className="hidden md:block" /> video, UI/UX and frontend engineering.
             </p>
           </div>
 
@@ -488,7 +388,7 @@ export default function Home() {
 
           <div className="relative mt-[2.5vw] h-[13vw] w-[17.4vw] max-md:h-48 max-md:w-64">
             <Float speed={0.06} className="absolute inset-0">
-              <Photo src="/designs/design-4.jpg" className="h-full w-full" />
+              <Photo src="/images/gallery.jpg" className="h-full w-full" />
             </Float>
           </div>
         </section>
@@ -590,65 +490,8 @@ export default function Home() {
         </section>
         <Rule />
 
-        {/* ==============================================================
-            VISUAL ARCHIVE (ALL 6 CURRENT GRAPHIC DESIGNS WITH LIGHTBOX)
-            ============================================================== */}
-        <section id="designs" className="px-[3.3vw] pb-[10vw] pt-[10vw] scroll-mt-6">
-          <div className="grid pb-[5vw] md:grid-cols-4">
-            <h2 className="f-xl text-[14vw] leading-[0.82] md:col-span-3 md:text-[7vw]">
-              Visual<br />Archive
-            </h2>
-            <p className="f-tx mt-6 max-w-[20rem] self-end pl-0 text-[clamp(16px,1.16vw,22px)] leading-[1.2] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.3vw]">
-              Typography posters, high-energy YouTube key art, identity marks, and experimental graphics.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2vw]">
-            {GRAPHIC_DESIGNS.map((d, index) => (
-              <div
-                key={d.id}
-                onClick={() => setSelectedDesign(d)}
-                className="group relative flex flex-col rounded-[22px] border border-[var(--line)] bg-[#0a0a0a] overflow-hidden cursor-pointer transition-all duration-300 hover:border-white/30 hover:-translate-y-1"
-              >
-                {/* Minimal Header Bar */}
-                <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--line)] bg-[#070707]">
-                  <span className="f-md text-xs sm:text-sm text-[var(--mute)]">
-                    0{index + 1}
-                  </span>
-                  <span className="f-md text-[11px] sm:text-xs uppercase tracking-wider text-white/80">
-                    {d.category}
-                  </span>
-                </div>
-
-                {/* Artwork Viewport */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#111111]">
-                  <Image
-                    src={d.src}
-                    alt={d.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
-                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
-                </div>
-
-                {/* Footer Bar */}
-                <div className="px-5 py-4 border-t border-[var(--line)] bg-[#070707]">
-                  <h3 className="f-xl text-base sm:text-lg leading-tight text-white group-hover:text-[var(--mute)] transition-colors">
-                    {d.title}
-                  </h3>
-                  <p className="f-tx mt-1 text-xs text-[var(--mute)] line-clamp-1">
-                    {d.subtitle} &bull; {d.year}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-        <Rule />
-
         {/* ---------- Experience ---------- */}
-        <section className="grid px-[3.3vw] pb-[8vw] pt-[12vw] max-md:pt-[14vw] md:grid-cols-[36.4vw_1fr]">
+        <section id="experience" className="grid px-[3.3vw] pb-[8vw] pt-[12vw] max-md:pt-[14vw] md:grid-cols-[36.4vw_1fr] scroll-mt-6">
           <h2 className="f-xl text-[clamp(28px,2.25vw,44px)] leading-none max-md:mb-8">
             Experience
           </h2>
@@ -662,7 +505,7 @@ export default function Home() {
                   <h3 className="f-xl text-[clamp(24px,1.7vw,32px)] leading-none">
                     {e.co}
                   </h3>
-                  <p className="f-md mt-[2.4vw] max-w-[12em] text-[clamp(12px,0.86vw,16px)] uppercase leading-[1.2] text-[var(--mute)] max-md:mt-5">
+                  <p className="f-md mt-[2.4vw] max-w-[14em] text-[clamp(12px,0.86vw,16px)] uppercase leading-[1.2] text-[var(--mute)] max-md:mt-5">
                     {e.role}
                   </p>
                 </div>
@@ -682,7 +525,7 @@ export default function Home() {
               Pro<br />Services
             </h2>
             <p className="f-tx mt-8 max-w-[19rem] self-end pl-0 text-[clamp(16px,1.27vw,24px)] leading-[1.15] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.3vw]">
-              Discover our range of creative services tailored to elevate your personal or brand vision to the next level.
+              Discover our range of creative and engineering services tailored to elevate your personal or brand vision to the next level.
             </p>
           </div>
           <ul className="tex mx-[3.3vw] mb-[10vw] md:ml-[40.6vw]">
@@ -738,97 +581,11 @@ export default function Home() {
 
           <div className="f-md mt-[6vw] flex flex-wrap justify-between gap-4 text-[clamp(12px,0.86vw,16px)] uppercase text-[var(--mute)] border-t border-[var(--line)] pt-6">
             <span>&copy; {new Date().getFullYear()} Mohd. Misfar</span>
-            <span>Video Editor &bull; Colorist &bull; Graphic Designer</span>
+            <span>Video Editor &bull; Colorist &bull; UI/UX &bull; Frontend Engineer</span>
             <span>Kerala, India</span>
           </div>
         </footer>
       </div>
-
-      {/* Lightbox Modal for Visual Archive */}
-      {selectedDesign && (
-        <div
-          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/92 p-4 sm:p-8 backdrop-blur-md"
-          onClick={() => setSelectedDesign(null)}
-        >
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={() => setSelectedDesign(null)}
-            aria-label="Close modal"
-            className="absolute top-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-white hover:text-black"
-          >
-            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-            </svg>
-          </button>
-
-          {/* Previous button */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
-              setSelectedDesign(
-                GRAPHIC_DESIGNS[(cur - 1 + GRAPHIC_DESIGNS.length) % GRAPHIC_DESIGNS.length]
-              );
-            }}
-            aria-label="Previous artwork"
-            className="absolute left-4 sm:left-8 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-white hover:text-black"
-          >
-            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-            </svg>
-          </button>
-
-          {/* Next button */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
-              setSelectedDesign(
-                GRAPHIC_DESIGNS[(cur + 1) % GRAPHIC_DESIGNS.length]
-              );
-            }}
-            aria-label="Next artwork"
-            className="absolute right-4 sm:right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-white hover:text-black"
-          >
-            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-            </svg>
-          </button>
-
-          {/* Modal Container */}
-          <div
-            className="relative flex flex-col items-center max-h-[90vh] max-w-5xl w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative aspect-[4/3] w-full max-h-[75vh] overflow-hidden rounded-2xl border border-white/10">
-              <Image
-                src={selectedDesign.src}
-                alt={selectedDesign.title}
-                fill
-                className="object-contain"
-                sizes="90vw"
-                priority
-              />
-            </div>
-            <div className="mt-4 flex w-full items-baseline justify-between px-2 text-left">
-              <div>
-                <h4 className="f-xl text-lg sm:text-2xl text-white">
-                  {selectedDesign.title}
-                </h4>
-                <p className="f-tx text-xs sm:text-sm text-[var(--mute)]">
-                  {selectedDesign.subtitle} &bull; {selectedDesign.tool}
-                </p>
-              </div>
-              <span className="f-md text-xs uppercase tracking-widest text-[var(--mute)]">
-                {selectedDesign.year}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

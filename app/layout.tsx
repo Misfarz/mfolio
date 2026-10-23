@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mohd. Misfar — Video Editor & Designer",
-  description: "Portfolio of Mohd. Misfar — Video Editor, Colorist & Graphic Designer based in Kerala, India.",
+  title: "Mohd. Misfar — Video Editor, UI/UX & Frontend Engineer",
+  description: "Portfolio of Mohd. Misfar — Video Editor, Colorist, UI/UX Designer & Frontend Engineer based in Kerala, India.",
 };
 
 export default function RootLayout({
