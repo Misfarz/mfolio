@@ -1,33 +1,39 @@
-import Link from "next/link";
-import { Anton, Pacifico, Plus_Jakarta_Sans } from "next/font/google";
-import { getCloudinaryVideoUrl } from "@/lib/cloudinary";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import AutoplayVideo from "@/components/AutoplayVideo";
-import GraphicDesignsSection, { GraphicDesignItem } from "@/components/GraphicDesignsSection";
-import ConnectButton from "@/components/ConnectButton";
+import { getCloudinaryVideoUrl } from "@/lib/cloudinary";
 
-// ==============================================================
-// CLOUDINARY VIDEOS CONFIGURATION
-// Paste your Cloudinary video URLs (or Public IDs) here!
-// ==============================================================
+/* =====================================================================
+   CONTENT & MEDIA CONFIGURATION
+   ===================================================================== */
 export const CLOUDINARY_VIDEOS = {
-  // Video 1: Full-width Hero Banner (Slot 01)
-  hero: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300389/hero2.mov", // Paste Cloudinary URL here, e.g. "https://res.cloudinary.com/oc4pkoeu/video/upload/..."
+  // Video 1: Featured Showreel (Slot 01)
+  hero: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300389/hero2.mov",
 
-  // Videos 2, 3, 4: Portrait/Vertical Slots (Slots 02, 03, 04)
-  slot2: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791302786/slot333.mov", // Paste Cloudinary URL for Video 2 (Portrait)
-  slot3: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300961/slot_2.mov", // Paste Cloudinary URL for Video 3 (Portrait)
-  slot4: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791305821/jifan.mov", // Paste Cloudinary URL for Video 4 (Portrait)
+  // Videos 2, 3, 4: Portrait / Vertical Slots
+  slot2: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791302786/slot333.mov",
+  slot3: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300961/slot_2.mov",
+  slot4: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791305821/jifan.mov",
 
-  // Videos 5, 6, 7: Portrait/Vertical Slots (Slots 05, 06, 07)
-  slot5: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910051/slot_00.mov", // Paste Cloudinary URL for Video 5 (Portrait)
-  slot6: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910063/slot_66.mov", // Paste Cloudinary URL for Video 6 (Portrait)
-  slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791303926/slot_4.mov", // Paste Cloudinary URL for Video 7 (Portrait)
+  // Videos 5, 6, 7: Portrait / Vertical Slots
+  slot5: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910051/slot_00.mov",
+  slot6: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910063/slot_66.mov",
+  slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791303926/slot_4.mov",
 };
 
-// ==============================================================
-// GRAPHIC DESIGNS CONFIGURATION
-// You can replace the src paths with your Cloudinary image URLs or local files!
-// ==============================================================
+export interface GraphicDesignItem {
+  id: string;
+  title: string;
+  category: "Thumbnails" | "Posters & Covers" | "Brand Identity" | "Typography";
+  subtitle: string;
+  tool: string;
+  year: string;
+  src: string;
+  description: string;
+}
+
 export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
   {
     id: "1",
@@ -49,7 +55,7 @@ export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
     year: "2026",
     src: "/designs/design-2.jpg",
     description:
-      "Dynamic YouTube thumbnail and digital cover featuring dramatic dual-tone neon rim lighting, stylized character silhouette, and high-CTR title treatments.",
+      "Dynamic digital cover featuring dramatic dual-tone rim lighting, character silhouette, and high-CTR title treatments.",
   },
   {
     id: "3",
@@ -60,7 +66,7 @@ export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
     year: "2025",
     src: "/designs/design-3.jpg",
     description:
-      "Complete corporate identity system including embossed copper-foil business cards, letterheads, and minimalist monogram logo mark.",
+      "Complete corporate identity system including embossed stationery, letterheads, and minimalist monogram logo mark.",
   },
   {
     id: "4",
@@ -71,7 +77,7 @@ export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
     year: "2026",
     src: "/designs/design-4.jpg",
     description:
-      "Experimental album packaging showcasing iridescent metallic fluid ribbons, holographic ripple textures, and cosmic nocturnal atmosphere.",
+      "Experimental album packaging showcasing iridescent metallic fluid ribbons, holographic textures, and cosmic nocturnal atmosphere.",
   },
   {
     id: "5",
@@ -93,718 +99,738 @@ export const GRAPHIC_DESIGNS: GraphicDesignItem[] = [
     year: "2026",
     src: "/designs/design-6.jpg",
     description:
-      "Playful cut-paper typographic poster with halftones, custom lettering curves, risograph textures, and energetic visual motion.",
+      "Playful typographic poster with halftones, custom lettering curves, risograph textures, and energetic visual motion.",
   },
 ];
 
-const display = Anton({
-  weight: "400",
-  subsets: ["latin"],
-});
-
-const script = Pacifico({
-  weight: "400",
-  subsets: ["latin"],
-});
-
-const sans = Plus_Jakarta_Sans({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-});
-
-const NAV = [
-  { label: "Videos", href: "#videos" },
-  { label: "Designs", href: "#designs" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+const stats = [
+  { n: "25+", l: "Projects done" },
+  { n: "5+", l: "Years of experience" },
+  { n: "12+", l: "Recognitions" },
+  { n: "98%", l: "Happy clients" },
 ];
 
-const SERVICES = [
+const steps = [
   {
-    id: "services",
-    title: "Videographer",
-    sub: "& editor",
-    bg: "#f6efe0",
-    fg: "#ff8a00",
-    ghost: "#e2d6bd",
-    side: "right",
+    t: "Discover and analysis",
+    d: "We begin by immersing ourselves in your story, vision, and goals. Through thoughtful conversations and collaborative brainstorming, we uncover the unique elements that make you stand out. This step focuses on understanding your audience and crafting a strategic plan tailored to your personal or professional brand.",
   },
   {
-    id: "colorist",
-    title: "Colorist",
-    sub: "color grading",
-    bg: "#ff8a00",
-    fg: "#0050c8",
-    ghost: "#ff9d2e",
-    side: "left",
+    t: "Concept and direction",
+    d: "Moodboards, style frames, pacing references and rough cuts turn the plan into a clear visual direction you can react to before anything is finalized.",
   },
   {
-    id: "design",
-    title: "Graphic",
-    sub: "designer",
-    bg: "#0a1a3a",
-    fg: "#f6efe0",
-    ghost: "#12285a",
-    side: "right",
+    t: "Create and deliver",
+    d: "Shooting, editing, color grading and graphic design are finished to precision and delivered in every format you need for web, cinema and social media.",
   },
-] as const;
+];
 
-export default function HomePage() {
+const experience = [
+  { co: "Decathlon", role: "Media content creator", yr: "2023 - 2024" },
+  { co: "Freelance", role: "Video editor & colorist", yr: "2024 - Present" },
+  { co: "Studio Lab", role: "Graphic designer & artist", yr: "2022 - 2023" },
+];
+
+const services = [
+  { n: "01", t: "Videography & Editing", d: "Cinematic cuts, short-form reels, pacing & sound design" },
+  { n: "02", t: "Color Grading", d: "DaVinci Resolve finishing, color science & film mood matching" },
+  { n: "03", t: "Graphic Design", d: "High-CTR thumbnails, posters, brand marks & typography" },
+  { n: "04", t: "Motion Graphics", d: "Kinetic titles, animated overlays & logo reveals" },
+];
+
+const verticalVideos = [
+  { id: "02", label: "Commercial Reel", sub: "Motion & Rhythm", src: CLOUDINARY_VIDEOS.slot2 },
+  { id: "03", label: "Cinematic Visuals", sub: "Color Science", src: CLOUDINARY_VIDEOS.slot3 },
+  { id: "04", label: "Short Film Cut", sub: "Character Narrative", src: CLOUDINARY_VIDEOS.slot4 },
+  { id: "05", label: "Brand Narrative", sub: "Dynamic Flow", src: CLOUDINARY_VIDEOS.slot5 },
+  { id: "06", label: "Creative Montage", sub: "Kinetic Pace", src: CLOUDINARY_VIDEOS.slot6 },
+  { id: "07", label: "Visual Storytelling", sub: "High Contrast", src: CLOUDINARY_VIDEOS.slot7 },
+];
+
+/* =====================================================================
+   SMALL REUSABLE PIECES
+   ===================================================================== */
+const Rule = () => <div className="mx-[1.5vw] h-px bg-[var(--line)]" />;
+
+function Clock() {
+  const [t, setT] = useState("00:00:00");
+  useEffect(() => {
+    const tick = () =>
+      setT(new Date().toLocaleTimeString("en-GB", { hour12: false }));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
   return (
-    <main
-      className={`${sans.className} relative min-h-screen overflow-x-hidden bg-[#0050c8] text-[#f6efe0] selection:bg-[#ff8a00] selection:text-[#0050c8]`}
-    >
-      {/* ============================================================== */}
-      {/* 1. HERO SECTION */}
-      {/* ============================================================== */}
-      <section className="relative flex min-h-screen flex-col justify-between overflow-hidden">
-        {/* Wavy background */}
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute inset-0 h-full w-full"
-          viewBox="0 0 1440 900"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0 520 C220 380 360 640 620 560 C880 480 960 220 1200 240 C1320 250 1400 160 1440 100 L1440 0 L0 0 Z"
-            fill="#003f9e"
-          />
-          <path
-            d="M0 900 L0 700 C240 640 420 820 700 780 C980 740 1160 600 1440 680 L1440 900 Z"
-            fill="#003f9e"
-          />
-        </svg>
-
-        {/* Inner frame */}
-        <div className="pointer-events-none absolute inset-2.5 rounded-[1.5rem] border-2 border-[#f6efe0]/90 sm:inset-4 sm:rounded-[2rem] md:inset-8 md:rounded-[2.5rem]" />
-
-        {/* Nav */}
-        <header className="relative z-10 flex items-center justify-end px-6 py-6 sm:px-10 sm:py-8 md:px-16 md:py-10">
-          <nav aria-label="Primary">
-            <ul className="flex items-center gap-5 text-sm font-medium tracking-wide sm:gap-8 sm:text-base md:gap-12">
-              {NAV.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="rounded px-1 py-1 transition-colors hover:text-[#ff8a00] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff8a00]"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </header>
-
-        {/* Hero Title */}
-        <div className="relative z-10 my-auto flex flex-1 items-center justify-center px-6 py-8 sm:px-10 md:px-16">
-          <div className="w-full max-w-4xl">
-            <h1 className="relative leading-none">
-              {/* Top row: Name & Year */}
-              <div className="mb-1 flex items-baseline justify-between gap-4 sm:mb-2">
-                <span className="block text-base font-medium tracking-wider sm:text-xl md:text-3xl">
-                  Mohd. Misfar
-                </span>
-                <span className="text-sm font-semibold tracking-wider text-[#f6efe0]/90 sm:text-xl md:text-3xl">
-                  2026
-                </span>
-              </div>
-
-              {/* PORT */}
-              <span
-                className={`${display.className} block text-[20vw] uppercase leading-[0.88] tracking-tight sm:text-[18vw] md:text-[11rem] lg:text-[13rem] select-none`}
-              >
-                Port
-              </span>
-
-              {/* folio */}
-              <span
-                className={`${script.className} -mt-3 block pl-[12vw] text-[16vw] leading-[0.88] text-[#ff8a00] sm:-mt-6 sm:pl-[16vw] sm:text-[14vw] md:-mt-12 md:pl-36 md:text-[8.5rem] lg:-mt-16 lg:pl-48 lg:text-[10rem] select-none`}
-              >
-                folio
-              </span>
-
-              {/* Tagline */}
-              <span className="mt-4 block text-sm font-normal tracking-wide text-[#f6efe0]/95 sm:mt-6 sm:text-lg md:mt-8 md:text-2xl">
-                Video editor &amp; designer
-              </span>
-            </h1>
-          </div>
-        </div>
-
-        {/* Bottom spacer */}
-        <div className="h-6 sm:h-8" />
-      </section>
-
-      {/* ============================================================== */}
-      {/* 2. SERVICES SECTION (BEHANCE-STYLE BANDS) */}
-      {/* ============================================================== */}
-      <section aria-label="What I do" className="relative z-10">
-        {SERVICES.map((s, i) => (
-          <Band
-            key={s.title}
-            {...s}
-            n={i + 1}
-            prev={i === 0 ? "#0050c8" : SERVICES[i - 1].bg}
-          />
-        ))}
-      </section>
-
-      {/* ============================================================== */}
-      {/* 3. ABOUT / BIO SECTION */}
-      {/* ============================================================== */}
-      <section id="about" style={{ background: "#0a1a3a" }} className="scroll-mt-4">
-        {/* Wavy transition from navy into cream */}
-        <svg
-          aria-hidden
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          className="-mb-px block h-16 w-full sm:h-20 md:h-28 lg:h-36"
-        >
-          <path
-            d="M0 60 C240 0 480 120 760 70 C1040 20 1240 100 1440 40 L1440 120 L0 120 Z"
-            fill="#f6efe0"
-          />
-        </svg>
-
-        {/* About Canvas */}
-        <div className="relative bg-[#f6efe0] text-[#0a1a3a] px-8 py-16 sm:px-14 sm:py-24 md:px-20 md:py-32 lg:px-28 lg:py-36">
-          <div className="mx-auto max-w-7xl">
-            {/* Top Bar with Circle Monogram */}
-            <div className="mb-10 sm:mb-16 flex items-center justify-between">
-              <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 border-[#0a1a3a] text-lg sm:text-xl font-bold tracking-tighter select-none">
-                M
-              </div>
-              <span className="text-xs uppercase tracking-widest text-[#0a1a3a]/60 hidden sm:block">
-                Mohd. Misfar &bull; Profile
-              </span>
-            </div>
-
-            {/* Two-Column Layout */}
-            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-              {/* Left Column: Typographic Headline */}
-              <div className="lg:col-span-5 select-none">
-                <div className="relative inline-block">
-                  <span
-                    className={`${display.className} block text-7xl uppercase leading-[0.85] tracking-tight text-[#0a1a3a] sm:text-8xl md:text-9xl lg:text-[9.5rem]`}
-                  >
-                    About
-                  </span>
-                  <span
-                    className={`${script.className} -mt-3 sm:-mt-5 md:-mt-8 block pl-10 sm:pl-16 md:pl-20 text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none text-[#ff8a00]`}
-                  >
-                    me
-                  </span>
-                </div>
-              </div>
-
-              {/* Right Column: Narrative with Orange Highlighted Phrases */}
-              <div className="lg:col-span-7">
-                <p className="text-xl font-medium leading-relaxed sm:text-2xl md:text-3xl lg:text-[2rem] lg:leading-[1.4] text-[#0a1a3a]">
-                  I&apos;m a{" "}
-                  <span className="font-bold text-[#ff8a00]">
-                    Video Editor, Graphic Designer, and Colorist
-                  </span>{" "}
-                  focused on creating{" "}
-                  <span className="font-bold text-[#ff8a00]">
-                    clean, engaging, and visually impactful content
-                  </span>
-                  .
-                </p>
-
-                <p className="mt-6 text-base font-normal leading-relaxed text-[#0a1a3a]/90 sm:text-lg md:text-xl lg:text-2xl">
-                  I work with{" "}
-                  <span className="font-semibold text-[#ff8a00]">
-                    DaVinci Resolve, Adobe Premiere Pro, Photoshop, After Effects
-                  </span>
-                  , and other creative tools for video editing, color grading, motion graphics, and graphic design.
-                </p>
-              </div>
-            </div>
-
-            {/* Bottom Row with 3 Geometric Diamonds */}
-            <div className="mt-14 sm:mt-20 flex justify-end items-center gap-2 text-[#0a1a3a] text-lg sm:text-2xl select-none">
-              <span className="inline-block transform rotate-45 h-3 w-3 sm:h-4 sm:w-4 bg-[#0a1a3a]" />
-              <span className="inline-block transform rotate-45 h-3 w-3 sm:h-4 sm:w-4 bg-[#0a1a3a]" />
-              <span className="inline-block transform rotate-45 h-3 w-3 sm:h-4 sm:w-4 bg-[#0a1a3a]" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================== */}
-      {/* 4. VIDEO SHOWCASE SECTION (EXACT ORDER: IMG 2 -> IMG 3 -> IMG 1) */}
-      {/* ============================================================== */}
-      <section id="videos" className="relative z-10 scroll-mt-4 bg-[#0d141f]">
-        {/* ------------------------------------------------------------ */}
-        {/* PART 1 (FROM 2ND IMAGE): HERO VIDEO BANNER WITH TITLE OVERLAY */}
-        {/* ------------------------------------------------------------ */}
-        <div className="relative w-full overflow-hidden bg-black">
-          {/* VIDEO SLOT 1 (Featured Hero Video - Fully contained inside wavy frame) */}
-          <div className="group relative aspect-[16/9] min-h-[520px] w-full sm:min-h-[640px] md:min-h-[760px] lg:min-h-[860px] bg-black overflow-hidden">
-            {/* Background Video */}
-            <AutoplayVideo
-              src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.hero)}
-              loop
-              muted
-              showSoundButton={true}
-              containerClassName="absolute inset-0 h-full w-full z-0"
-              className="h-full w-full object-cover"
-            />
-
-            {/* Top Cream Wave cutting directly over the video (Zero gap / fully contained) */}
-            <div className="pointer-events-none absolute -top-1 left-0 z-20 w-full">
-              <svg
-                aria-hidden
-                viewBox="0 0 1440 120"
-                preserveAspectRatio="none"
-                className="block h-16 w-full sm:h-20 md:h-28 lg:h-36"
-              >
-                <path
-                  d="M0 0 L1440 0 L1440 40 C1220 90 1020 10 740 60 C460 110 240 20 0 60 Z"
-                  fill="#f6efe0"
-                />
-              </svg>
-            </div>
-
-            {/* Subtle dark gradient overlay to ensure text contrast */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none" />
-
-            {/* Typography Overlay Matching Image 2 */}
-            <div className="pointer-events-none absolute left-6 top-16 z-20 select-none sm:left-12 sm:top-24 md:left-20 md:top-36">
-              <div className="relative leading-none">
-                {/* Line 1: Fram + es */}
-                <div className="flex items-baseline">
-                  <span
-                    className={`${display.className} text-6xl uppercase tracking-tight text-[#f6efe0] sm:text-8xl md:text-9xl lg:text-[11rem] drop-shadow-lg`}
-                  >
-                    Fram
-                  </span>
-                  <span
-                    className={`${script.className} -ml-4 sm:-ml-8 md:-ml-12 text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] text-[#ff8a00] drop-shadow-md`}
-                  >
-                    es
-                  </span>
-                </div>
-
-                {/* Line 2: By + Me */}
-                <div className="-mt-3 sm:-mt-6 md:-mt-10 lg:-mt-14 flex items-baseline">
-                  <span
-                    className={`${display.className} text-6xl uppercase tracking-tight text-[#f6efe0] sm:text-8xl md:text-9xl lg:text-[11rem] drop-shadow-lg`}
-                  >
-                    By
-                  </span>
-                  <span
-                    className={`${script.className} -ml-2 sm:-ml-6 md:-ml-8 text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] text-[#ff8a00] drop-shadow-md`}
-                  >
-                    Me
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Wave Divider in Orange (Exact Image 2 Footer Shape) */}
-            <div className="pointer-events-none absolute -bottom-1 left-0 z-20 w-full">
-              <svg
-                aria-hidden
-                viewBox="0 0 1440 160"
-                preserveAspectRatio="none"
-                className="block h-20 w-full sm:h-28 md:h-36 lg:h-44"
-              >
-                <path
-                  d="M0 160 L0 120 C180 140 320 40 520 70 C720 100 860 0 1060 20 C1240 40 1360 110 1440 90 L1440 160 Z"
-                  fill="#ff8a00"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* ------------------------------------------------------------ */}
-        {/* PART 2 (FROM 3RD IMAGE): 3 PORTRAIT/VERTICAL VIDEOS UNDER ORANGE WAVE */}
-        {/* ------------------------------------------------------------ */}
-        <div className="relative w-full bg-[#ff8a00] p-0">
-          {/* 3 Side-by-Side Video Cards - Flush with no gap, no rounded corners, no borders */}
-          <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-0 w-full">
-            {/* VIDEO SLOT 2 (Portrait Video 1) */}
-            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
-              {CLOUDINARY_VIDEOS.slot2 ? (
-                <AutoplayVideo
-                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot2)}
-                  loop
-                  muted
-                  showSoundButton={true}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 50% 50%, rgba(255, 138, 0, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%)",
-                    }}
-                  />
-                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
-                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#ff8a00] text-[#0a1a3a] shadow-lg">
-                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
-                      Video Slot 02
-                    </span>
-                    <span className="text-[11px] text-white/70">
-                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot2
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
-                    4K Vertical
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* VIDEO SLOT 3 (Portrait Video 2 - Center) */}
-            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
-              {CLOUDINARY_VIDEOS.slot3 ? (
-                <AutoplayVideo
-                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot3)}
-                  loop
-                  muted
-                  showSoundButton={true}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 50% 50%, rgba(0, 80, 200, 0.35) 0%, rgba(15, 23, 42, 0.95) 100%)",
-                    }}
-                  />
-                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
-                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white text-[#0a1a3a] shadow-lg">
-                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
-                      Video Slot 03
-                    </span>
-                    <span className="text-[11px] text-white/70">
-                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot3
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
-                    4K Vertical
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* VIDEO SLOT 4 (Portrait Video 3 - Right) */}
-            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
-              {CLOUDINARY_VIDEOS.slot4 ? (
-                <AutoplayVideo
-                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot4)}
-                  loop
-                  muted
-                  showSoundButton={true}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 50% 50%, rgba(255, 138, 0, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%)",
-                    }}
-                  />
-                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
-                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#ff8a00] text-[#0a1a3a] shadow-lg">
-                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
-                      Video Slot 04
-                    </span>
-                    <span className="text-[11px] text-white/70">
-                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot4
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
-                    4K Vertical
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* ------------------------------------------------------------ */}
-        {/* PART 3: 3 VERTICAL VIDEOS SIDE-BY-SIDE (ROW 2) */}
-        {/* ------------------------------------------------------------ */}
-        <div className="relative w-full bg-[#0a1424] px-0 py-0">
-          {/* 3 Side-by-Side Vertical Videos - Flush with no gap, no rounded corners, no borders */}
-          <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-0 w-full">
-            {/* VIDEO SLOT 5 (Portrait Video 1) */}
-            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
-              {CLOUDINARY_VIDEOS.slot5 ? (
-                <AutoplayVideo
-                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot5)}
-                  loop
-                  muted
-                  showSoundButton={true}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 50% 50%, rgba(0, 80, 200, 0.4) 0%, rgba(15, 23, 42, 0.95) 100%)",
-                    }}
-                  />
-                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
-                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#ff8a00] text-[#0a1a3a] shadow-lg">
-                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
-                      Video Slot 05
-                    </span>
-                    <span className="text-[11px] text-white/70">
-                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot5
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
-                    4K Vertical
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* VIDEO SLOT 6 (Portrait Video 2 - Center) */}
-            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
-              {CLOUDINARY_VIDEOS.slot6 ? (
-                <AutoplayVideo
-                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot6)}
-                  loop
-                  muted
-                  showSoundButton={true}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 50% 50%, rgba(255, 138, 0, 0.35) 0%, rgba(15, 23, 42, 0.95) 100%)",
-                    }}
-                  />
-                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
-                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white text-[#0a1a3a] shadow-lg">
-                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
-                      Video Slot 06
-                    </span>
-                    <span className="text-[11px] text-white/70">
-                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot6
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
-                    4K Vertical
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* VIDEO SLOT 7 (Portrait Video 3 - Right) */}
-            <div className="group relative aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden rounded-none border-0 bg-[#0f172a] flex items-center justify-center">
-              {CLOUDINARY_VIDEOS.slot7 ? (
-                <AutoplayVideo
-                  src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.slot7)}
-                  loop
-                  muted
-                  showSoundButton={true}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity group-hover:opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 50% 50%, rgba(255, 138, 0, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%)",
-                    }}
-                  />
-                  <div className="relative z-10 flex flex-col items-center gap-3 transition-transform duration-300 group-hover:scale-105 text-center px-4">
-                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#ff8a00] text-[#0a1a3a] shadow-lg">
-                      <svg className="ml-1 h-6 w-6 sm:h-7 sm:w-7 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
-                      Video Slot 07
-                    </span>
-                    <span className="text-[11px] text-white/70">
-                      Portrait 4:5 &bull; Paste Cloudinary URL in CLOUDINARY_VIDEOS.slot7
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white/80">
-                    4K Vertical
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Bottom decorative cream curve matching Image 1 footer */}
-          <div className="pointer-events-none mt-8 flex justify-center">
-            <div className="h-6 w-36 sm:h-8 sm:w-52 rounded-t-full bg-[#f6efe0] opacity-80" />
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================== */}
-      {/* 5. GRAPHIC DESIGNS SECTION */}
-      {/* ============================================================== */}
-      <GraphicDesignsSection
-        designs={GRAPHIC_DESIGNS}
-        displayClassName={display.className}
-        scriptClassName={script.className}
-      />
-
-      {/* ============================================================== */}
-      {/* 6. CONTACT / FOOTER */}
-      {/* ============================================================== */}
-      <footer
-        id="contact"
-        style={{ background: "#f6efe0" }}
-        className="relative z-10 scroll-mt-4"
-      >
-        {/* Wave transition from cream graphic designs section into dark navy footer */}
-        <svg
-          aria-hidden
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          className="-mb-px block h-16 w-full sm:h-20 md:h-28"
-        >
-          <path
-            d="M0 60 C240 0 480 120 760 70 C1040 20 1240 100 1440 40 L1440 120 L0 120 Z"
-            fill="#0a1a3a"
-          />
-        </svg>
-
-        <div className="bg-[#0a1a3a] px-6 py-16 text-[#f6efe0] sm:px-12 sm:py-24">
-          <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-8 text-center sm:flex-row sm:text-left">
-            <div>
-              <span className="text-xs uppercase tracking-widest text-[#ff8a00]">
-                Let&apos;s Connect
-              </span>
-              <h3 className={`${display.className} mt-2 text-3xl uppercase tracking-tight sm:text-5xl`}>
-                Mohd. Misfar
-              </h3>
-              <p className="mt-2 text-sm text-[#f6efe0]/80">
-                Video Editor &bull; Colorist &bull; Graphic Designer
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center gap-4 sm:items-end">
-              <ConnectButton
-                whatsappNumber="918136902028"
-                email="misfaryusaf@gmail.com"
-              />
-              <span className="text-xs text-[#f6efe0]/60">
-                &copy; 2026 Mohd. Misfar &bull; All Rights Reserved
-              </span>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </main>
+    <span className="f-md text-[clamp(13px,1vw,18px)] uppercase text-[var(--mute)]">
+      Local/<span className="tabular-nums text-white/90">{t}</span>
+    </span>
   );
 }
 
-function Band({
-  id,
-  title,
-  sub,
-  bg,
-  fg,
-  ghost,
-  side,
-  n,
-  prev,
-}: (typeof SERVICES)[number] & { n: number; prev: string }) {
-  const isRight = side === "right";
+function Cursor() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const m = (e: MouseEvent) => {
+      if (ref.current)
+        ref.current.style.transform = `translate(${e.clientX - 10}px,${e.clientY - 10}px)`;
+    };
+    addEventListener("mousemove", m);
+    return () => removeEventListener("mousemove", m);
+  }, []);
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-5 w-5 rounded-full bg-white mix-blend-difference [@media(hover:hover)_and_(pointer:fine)]:block"
+    />
+  );
+}
+
+function Float({
+  speed,
+  className,
+  children,
+}: {
+  speed: number;
+  className: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const update = () => {
+      const parent = el.parentElement;
+      if (!parent) return;
+      const r = parent.getBoundingClientRect();
+      el.style.transform = `translate3d(0,${
+        (r.top + r.height / 2 - window.innerHeight / 2) * speed
+      }px,0)`;
+    };
+    const on = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    addEventListener("scroll", on, { passive: true });
+    return () => removeEventListener("scroll", on);
+  }, [speed]);
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+}
+
+const Photo = ({
+  src,
+  className = "",
+  alt = "Portfolio Visual",
+}: {
+  src: string;
+  className?: string;
+  alt?: string;
+}) => (
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    className={`rounded-[24px] bg-[#161616] object-cover shadow-2xl border border-[var(--line)] ${className}`}
+  />
+);
+
+const stroke = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.6,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+} as const;
+
+const PinIcon = () => (
+  <svg viewBox="0 0 24 24" className="h-[26px] w-[26px] text-[#22c55e]" {...stroke}>
+    <path d="M12 21s-6-5.2-6-10a6 6 0 1112 0c0 4.8-6 10-6 10z" />
+    <circle cx="12" cy="11" r="2.2" />
+  </svg>
+);
+
+const GlobeIcon = () => (
+  <svg viewBox="0 0 48 24" className="h-[26px] w-[52px] text-white" {...stroke}>
+    <ellipse cx="24" cy="12" rx="22" ry="10" />
+    <ellipse cx="24" cy="12" rx="10" ry="10" />
+    <ellipse cx="24" cy="12" rx="4" ry="10" />
+    <path d="M2 12h44M5 7h38M5 17h38M24 2v20" />
+  </svg>
+);
+
+const BadgeIcon = () => (
+  <svg viewBox="0 0 24 24" className="h-[26px] w-[26px] text-[#0ea5e9]" {...stroke}>
+    <path d="M12 2l2.4 1.7 2.9-.2 1.2 2.7 2.4 1.7-.7 2.8.7 2.8-2.4 1.7-1.2 2.7-2.9-.2L12 22l-2.4-1.7-2.9.2-1.2-2.7-2.4-1.7.7-2.8-.7-2.8 2.4-1.7 1.2-2.7 2.9.2z" />
+    <path d="M8 12l2.7 2.7L16 9.5" />
+  </svg>
+);
+
+/* =====================================================================
+   HERO — dynamic sizing to auto-fit viewport width
+   ===================================================================== */
+function Hero() {
+  const m = useRef<HTMLSpanElement>(null);
+  const [fs, setFs] = useState(0);
+
+  useEffect(() => {
+    const fit = () => {
+      const w = m.current?.getBoundingClientRect().width;
+      if (w) setFs((100 * document.documentElement.clientWidth * 0.955) / w);
+    };
+    fit();
+    document.fonts?.ready?.then(fit);
+    addEventListener("resize", fit);
+    return () => removeEventListener("resize", fit);
+  }, []);
 
   return (
-    <div id={id} style={{ background: prev }} className="scroll-mt-4">
-      {/* Smooth Wavy Connecting SVG */}
-      <svg
+    <section className="relative px-[1.5vw] pb-[3vw] pt-[4.2vw]">
+      {/* Measure target (widest word) */}
+      <span
+        ref={m}
         aria-hidden
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        className="-mb-px block h-16 w-full sm:h-20 md:h-28 lg:h-36"
+        className="f-xl invisible absolute left-0 top-0 whitespace-nowrap text-[100px]"
       >
-        <path
-          d="M0 60 C240 0 480 120 760 70 C1040 20 1240 100 1440 40 L1440 120 L0 120 Z"
-          fill={bg}
-        />
-      </svg>
+        MISFAR
+      </span>
+      <h1
+        className="f-xl select-none text-center leading-[0.84]"
+        style={{ fontSize: fs ? `${fs}px` : "16vw" }}
+      >
+        <span className="block">MOHD.</span>
+        <span className="block">MISFAR</span>
+      </h1>
+    </section>
+  );
+}
 
-      {/* Band Body */}
-      <div
-        style={{ background: bg, color: fg }}
-        className="relative overflow-hidden px-6 py-20 sm:px-12 sm:py-28 md:px-20 md:py-36 lg:px-28 lg:py-44"
-      >
-        <div className="relative mx-auto flex w-full max-w-7xl items-center">
-          {/* Giant Ghost Number - Positioned on the active side */}
-          <span
-            aria-hidden
-            style={{ color: ghost }}
-            className={`${display.className} pointer-events-none absolute top-1/2 -translate-y-1/2 select-none text-[18rem] font-bold leading-none sm:text-[24rem] md:text-[32rem] lg:text-[40rem] ${isRight
-              ? "right-0 sm:right-4 md:right-12 lg:right-20"
-              : "left-0 sm:left-4 md:left-12 lg:left-20"
-              }`}
+/* =====================================================================
+   MAIN PAGE
+   ===================================================================== */
+export default function Home() {
+  const [step, setStep] = useState(0);
+  const [selectedDesign, setSelectedDesign] = useState<GraphicDesignItem | null>(null);
+
+  // Lightbox keyboard navigation
+  useEffect(() => {
+    if (!selectedDesign) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedDesign(null);
+      } else if (e.key === "ArrowRight") {
+        const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
+        setSelectedDesign(GRAPHIC_DESIGNS[(cur + 1) % GRAPHIC_DESIGNS.length]);
+      } else if (e.key === "ArrowLeft") {
+        const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
+        setSelectedDesign(
+          GRAPHIC_DESIGNS[(cur - 1 + GRAPHIC_DESIGNS.length) % GRAPHIC_DESIGNS.length]
+        );
+      }
+    };
+    addEventListener("keydown", handleKeyDown);
+    return () => removeEventListener("keydown", handleKeyDown);
+  }, [selectedDesign]);
+
+  return (
+    <div className="tex relative min-h-screen overflow-x-clip text-white antialiased selection:bg-white selection:text-black">
+      <Cursor />
+
+      {/* Subtle vertical grid lines (behind everything) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <i className="absolute inset-y-0 left-1/2 w-px bg-[var(--line)]" />
+        <i className="absolute inset-y-0 left-[23.6%] hidden w-px bg-[var(--line)] md:block" />
+        <i className="absolute inset-y-0 left-[76.4%] hidden w-px bg-[var(--line)] md:block" />
+      </div>
+
+      <div className="relative z-10">
+        {/* ---------- Header ---------- */}
+        <header className="flex items-center justify-between px-[3.3vw] py-[0.8vw] max-md:py-3.5">
+          <Clock />
+
+          <nav className="hidden md:flex items-center gap-6">
+            <a
+              href="#films"
+              className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
+            >
+              Films
+            </a>
+            <a
+              href="#designs"
+              className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
+            >
+              Visuals
+            </a>
+            <a
+              href="#services"
+              className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
+            >
+              Services
+            </a>
+            <a
+              href="#about"
+              className="f-md text-[clamp(12px,0.86vw,15px)] uppercase text-[var(--mute)] hover:text-white transition-colors"
+            >
+              About
+            </a>
+          </nav>
+
+          <a
+            href="#contact"
+            className="f-md flex h-[clamp(40px,2.8vw,54px)] items-center rounded-full border border-white px-[clamp(18px,1.4vw,28px)] text-[clamp(13px,1vw,18px)] uppercase transition-all duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
-            {n}
-          </span>
+            Contact now
+          </a>
+        </header>
+        <Rule />
 
-          {/* Text Lockup - Anchored to the exact same side as the Ghost Number */}
+        {/* ---------- Hero ---------- */}
+        <Hero />
+        <Rule />
+
+        {/* ---------- Info strip ---------- */}
+        <section className="relative flex flex-col items-center gap-8 py-10 md:block md:h-[9.2vw] md:py-0">
+          {[
+            { i: <PinIcon />, a: "Based in Kerala,", b: "India", x: "13.8%" },
+            { i: <GlobeIcon />, a: "Available all around", b: "Worldwide", x: "50%" },
+            { i: <BadgeIcon />, a: "Video editor &", b: "Graphic designer", x: "86.2%" },
+          ].map((s) => (
+            <div
+              key={s.a}
+              style={{ left: s.x }}
+              className="flex flex-col items-center gap-[0.8vw] text-center max-md:gap-3 md:absolute md:top-[2.2vw] md:-translate-x-1/2"
+            >
+              {s.i}
+              <p className="f-md text-[clamp(13px,0.86vw,16px)] uppercase leading-[1.18]">
+                {s.a}
+                <br />
+                <span className="text-[var(--mute)]">{s.b}</span>
+              </p>
+            </div>
+          ))}
+        </section>
+        <Rule />
+
+        {/* ---------- Intro ---------- */}
+        <section id="about" className="grid px-[3.3vw] pb-[8vw] pt-[10vw] md:grid-cols-4 scroll-mt-6">
+          <h2 className="f-xl text-[10.5vw] leading-[0.86] md:col-span-3 md:text-[5.2vw]">
+            I'm Mohd. Misfar<br className="hidden md:block" /> based in Kerala,<br className="hidden md:block" /> India.
+          </h2>
+          <p className="f-tx mt-8 max-w-[19rem] self-end pl-0 text-[clamp(16px,1.16vw,22px)] leading-[1.2] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.6vw]">
+            Focused on creating clean, engaging, and visually impactful content across video editing, cinematic color grading, and graphic design.
+          </p>
+        </section>
+
+        {/* ---------- Process (Interactive tab dots) ---------- */}
+        <section className="pb-[12vw] max-md:px-[3.3vw] md:grid md:grid-cols-[47.6vw_1fr]">
           <div
-            className={`relative z-10 flex w-full ${isRight
-              ? "justify-end pr-2 sm:pr-6 md:pr-16 lg:pr-24"
-              : "justify-start pl-2 sm:pl-6 md:pl-16 lg:pl-24"
-              }`}
+            role="tablist"
+            aria-label="Process steps"
+            className="flex h-fit gap-[10px] pt-3 max-md:mb-6 md:pl-[33.3vw]"
           >
-            <h2 className="relative flex flex-col items-start select-none">
-              <span
-                className={`${display.className} text-6xl uppercase tracking-tight sm:text-7xl md:text-8xl lg:text-9xl leading-[0.9]`}
-              >
-                {title}
-              </span>
-              <span
-                className={`${script.className} -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8 pl-6 sm:pl-10 md:pl-16 lg:pl-20 text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none`}
-              >
-                {sub}
-              </span>
+            {steps.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={step === i}
+                aria-label={`Step ${i + 1}`}
+                onClick={() => setStep(i)}
+                className={`h-[11px] w-[11px] rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${
+                  step === i ? "bg-white scale-125" : "bg-[#333333] hover:bg-[#666666]"
+                }`}
+              />
+            ))}
+          </div>
+          <div className="max-w-[46vw] pr-[3.3vw] max-md:max-w-none">
+            <h3 className="f-xl text-[clamp(20px,1.6vw,30px)] leading-none">
+              {steps[step].t}
+            </h3>
+            <p className="f-tx mt-[1.4vw] text-[clamp(16px,1.2vw,22px)] font-medium leading-[1.26] text-[var(--mute)] max-md:mt-4">
+              {steps[step].d}
+            </p>
+          </div>
+        </section>
+
+        {/* ---------- Statement with floating photos & signature ---------- */}
+        <section className="flex flex-col items-center px-[4vw] pb-[10vw] pt-[6vw]">
+          <div className="relative w-full">
+            <Float
+              speed={0.1}
+              className="absolute -top-[6vw] left-[16.2vw] z-10 hidden md:block"
+            >
+              <Photo src="/designs/design-1.jpg" className="h-[13vw] w-[17.4vw]" />
+            </Float>
+            <Float
+              speed={-0.14}
+              className="absolute -top-[11.6vw] left-[66.5vw] z-10 hidden md:block"
+            >
+              <Photo src="/designs/design-2.jpg" className="h-[18.4vw] w-[17.4vw]" />
+            </Float>
+            <p className="f-xl mx-auto max-w-[82vw] text-center text-[7.4vw] leading-[0.84] md:text-[3.05vw]">
+              Freelance creative professional based in
+              <br className="hidden md:block" /> Kerala, India, guiding
+              <br className="hidden md:block" /> creators &amp; brands achieve their vision in
+              <br className="hidden md:block" /> video, color &amp; design.
+            </p>
+          </div>
+
+          {/* Minimal Cursive Signature */}
+          <div
+            className="mt-[3.6vw] select-none text-[clamp(56px,5.2vw,100px)] leading-none text-white/95"
+            style={{ fontFamily: "'Mrs Saint Delafield', cursive" }}
+          >
+            Misfar
+          </div>
+
+          <div className="relative mt-[2.5vw] h-[13vw] w-[17.4vw] max-md:h-48 max-md:w-64">
+            <Float speed={0.06} className="absolute inset-0">
+              <Photo src="/designs/design-4.jpg" className="h-full w-full" />
+            </Float>
+          </div>
+        </section>
+
+        {/* ---------- Stats ---------- */}
+        <section className="overflow-hidden">
+          <div className="grid grid-cols-2 gap-y-10 px-[4.6vw] pb-[2.6vw] pt-[4vw] md:grid-cols-[repeat(3,25.1vw)_auto] md:pr-0">
+            {stats.map((s) => (
+              <div key={s.l}>
+                <div className="f-xl text-[14vw] leading-[0.9] md:text-[5.6vw]">
+                  {s.n}
+                </div>
+                <div className="f-md mt-[1.9vw] text-[clamp(12px,0.85vw,16px)] uppercase text-[var(--mute)] max-md:mt-3">
+                  {s.l}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <Rule />
+
+        {/* ==============================================================
+            SELECTED FILMS (ALL 7 CURRENT VIDEOS MATCHING NEW AESTHETICS)
+            ============================================================== */}
+        <section id="films" className="px-[3.3vw] pb-[10vw] pt-[10vw] scroll-mt-6">
+          <div className="grid pb-[5vw] md:grid-cols-4">
+            <h2 className="f-xl text-[14vw] leading-[0.82] md:col-span-3 md:text-[7vw]">
+              Selected<br />Films
             </h2>
+            <p className="f-tx mt-6 max-w-[20rem] self-end pl-0 text-[clamp(16px,1.16vw,22px)] leading-[1.2] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.3vw]">
+              Direction, editing, and cinematic color grading across commercials, short-form reels, and brand stories.
+            </p>
+          </div>
+
+          {/* 1. Featured Widescreen Reel (Slot 01) */}
+          <div className="relative mb-[4vw] overflow-hidden rounded-[24px] border border-[var(--line)] bg-[#0c0c0c]">
+            <div className="relative aspect-[16/9] w-full max-h-[780px]">
+              <AutoplayVideo
+                src={getCloudinaryVideoUrl(CLOUDINARY_VIDEOS.hero)}
+                loop
+                muted
+                showSoundButton={true}
+                className="h-full w-full object-cover"
+                containerClassName="absolute inset-0 h-full w-full"
+              />
+              {/* Minimal Top Badges */}
+              <div className="pointer-events-none absolute top-4 left-4 z-20 flex items-center gap-3 sm:top-6 sm:left-6">
+                <span className="f-md rounded-full border border-white/20 bg-black/60 px-3 py-1 text-[11px] sm:text-xs tracking-wider uppercase backdrop-blur-md">
+                  01 / Featured Reel
+                </span>
+                <span className="f-md hidden sm:inline-block rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[11px] tracking-wider uppercase text-[var(--mute)] backdrop-blur-md">
+                  4K Master Cut
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Vertical / Portrait Videos Grid (Slots 02 to 07) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2vw]">
+            {verticalVideos.map((v) => (
+              <div
+                key={v.id}
+                className="group relative flex flex-col rounded-[22px] border border-[var(--line)] bg-[#0a0a0a] overflow-hidden transition-all duration-300 hover:border-white/30"
+              >
+                {/* Header Bar */}
+                <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--line)] bg-[#070707]">
+                  <span className="f-md text-xs sm:text-sm text-[var(--mute)]">
+                    {v.id}
+                  </span>
+                  <span className="f-md text-[11px] sm:text-xs uppercase tracking-wider text-white/90">
+                    {v.label}
+                  </span>
+                </div>
+
+                {/* Vertical Video Viewport */}
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#000000]">
+                  <AutoplayVideo
+                    src={getCloudinaryVideoUrl(v.src)}
+                    loop
+                    muted
+                    showSoundButton={true}
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                    containerClassName="absolute inset-0 h-full w-full"
+                  />
+                </div>
+
+                {/* Footer Subtitle */}
+                <div className="flex items-center justify-between px-5 py-3 border-t border-[var(--line)] bg-[#070707]">
+                  <span className="f-tx text-xs text-[var(--mute)]">
+                    {v.sub}
+                  </span>
+                  <span className="f-md text-[10px] uppercase tracking-widest text-white/50">
+                    Vertical Reel
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <Rule />
+
+        {/* ==============================================================
+            VISUAL ARCHIVE (ALL 6 CURRENT GRAPHIC DESIGNS WITH LIGHTBOX)
+            ============================================================== */}
+        <section id="designs" className="px-[3.3vw] pb-[10vw] pt-[10vw] scroll-mt-6">
+          <div className="grid pb-[5vw] md:grid-cols-4">
+            <h2 className="f-xl text-[14vw] leading-[0.82] md:col-span-3 md:text-[7vw]">
+              Visual<br />Archive
+            </h2>
+            <p className="f-tx mt-6 max-w-[20rem] self-end pl-0 text-[clamp(16px,1.16vw,22px)] leading-[1.2] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.3vw]">
+              Typography posters, high-energy YouTube key art, identity marks, and experimental graphics.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2vw]">
+            {GRAPHIC_DESIGNS.map((d, index) => (
+              <div
+                key={d.id}
+                onClick={() => setSelectedDesign(d)}
+                className="group relative flex flex-col rounded-[22px] border border-[var(--line)] bg-[#0a0a0a] overflow-hidden cursor-pointer transition-all duration-300 hover:border-white/30 hover:-translate-y-1"
+              >
+                {/* Minimal Header Bar */}
+                <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--line)] bg-[#070707]">
+                  <span className="f-md text-xs sm:text-sm text-[var(--mute)]">
+                    0{index + 1}
+                  </span>
+                  <span className="f-md text-[11px] sm:text-xs uppercase tracking-wider text-white/80">
+                    {d.category}
+                  </span>
+                </div>
+
+                {/* Artwork Viewport */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#111111]">
+                  <Image
+                    src={d.src}
+                    alt={d.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
+                </div>
+
+                {/* Footer Bar */}
+                <div className="px-5 py-4 border-t border-[var(--line)] bg-[#070707]">
+                  <h3 className="f-xl text-base sm:text-lg leading-tight text-white group-hover:text-[var(--mute)] transition-colors">
+                    {d.title}
+                  </h3>
+                  <p className="f-tx mt-1 text-xs text-[var(--mute)] line-clamp-1">
+                    {d.subtitle} &bull; {d.year}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <Rule />
+
+        {/* ---------- Experience ---------- */}
+        <section className="grid px-[3.3vw] pb-[8vw] pt-[12vw] max-md:pt-[14vw] md:grid-cols-[36.4vw_1fr]">
+          <h2 className="f-xl text-[clamp(28px,2.25vw,44px)] leading-none max-md:mb-8">
+            Experience
+          </h2>
+          <div className="tex md:-mr-[3.3vw] md:pr-[3.3vw]">
+            {experience.map((e) => (
+              <div
+                key={e.co + e.role}
+                className="flex flex-wrap items-start justify-between gap-6 border-t border-[var(--line)] pb-[3.4vw] pt-[3.9vw] max-md:pt-8"
+              >
+                <div>
+                  <h3 className="f-xl text-[clamp(24px,1.7vw,32px)] leading-none">
+                    {e.co}
+                  </h3>
+                  <p className="f-md mt-[2.4vw] max-w-[12em] text-[clamp(12px,0.86vw,16px)] uppercase leading-[1.2] text-[var(--mute)] max-md:mt-5">
+                    {e.role}
+                  </p>
+                </div>
+                <span className="f-md mt-[2.7vw] text-[clamp(12px,0.86vw,16px)] tracking-[.04em] text-[var(--mute)] max-md:mt-0">
+                  {e.yr}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+        <Rule />
+
+        {/* ---------- Services ---------- */}
+        <section id="services" className="scroll-mt-6">
+          <div className="grid px-[3.3vw] pb-[5.4vw] pt-[11vw] md:grid-cols-4">
+            <h2 className="f-xl text-[17vw] leading-[0.8] md:col-span-3 md:text-[7.4vw]">
+              Pro<br />Services
+            </h2>
+            <p className="f-tx mt-8 max-w-[19rem] self-end pl-0 text-[clamp(16px,1.27vw,24px)] leading-[1.15] text-[var(--mute)] md:col-start-4 md:mt-0 md:pl-[0.3vw]">
+              Discover our range of creative services tailored to elevate your personal or brand vision to the next level.
+            </p>
+          </div>
+          <ul className="tex mx-[3.3vw] mb-[10vw] md:ml-[40.6vw]">
+            {services.map((s) => (
+              <li
+                key={s.n + s.t}
+                className="grid grid-cols-[3.5rem_1fr] border-t border-[var(--line)] pb-[2.4vw] pt-[2vw] max-md:py-6 md:grid-cols-[7.95vw_1fr]"
+              >
+                <span className="f-md text-[clamp(12px,0.86vw,16px)] text-[var(--mute)]">
+                  {s.n}
+                </span>
+                <div>
+                  <h3 className="f-tx text-[clamp(20px,1.27vw,24px)] font-medium leading-[1.05]">
+                    {s.t}
+                  </h3>
+                  <p className="f-md mt-[0.35vw] text-[clamp(11px,0.82vw,16px)] font-medium uppercase tracking-[.02em] text-[var(--mute)]">
+                    {s.d}
+                  </p>
+                </div>
+              </li>
+            ))}
+            <li className="border-t border-[var(--line)]" aria-hidden />
+          </ul>
+        </section>
+        <Rule />
+
+        {/* ---------- Footer / Contact ---------- */}
+        <footer id="contact" className="px-[3.3vw] pb-12 pt-[8vw] scroll-mt-6">
+          <a
+            href="mailto:misfaryusaf@gmail.com"
+            className="f-xl block text-[12vw] leading-[0.82] transition-colors hover:text-[var(--mute)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-white"
+          >
+            Let's talk
+          </a>
+
+          {/* Quick Communication Actions */}
+          <div className="mt-[4vw] flex flex-wrap items-center gap-4">
+            <a
+              href="https://wa.me/918136902028?text=Hi%20Misfar!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="f-md flex h-12 items-center rounded-full border border-white/30 px-6 text-sm uppercase tracking-wider transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+            >
+              WhatsApp (+91 81369 02028)
+            </a>
+            <a
+              href="mailto:misfaryusaf@gmail.com?subject=Project%20Inquiry%20-%20Mohd.%20Misfar"
+              className="f-md flex h-12 items-center rounded-full border border-white/30 px-6 text-sm uppercase tracking-wider transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+            >
+              Email (misfaryusaf@gmail.com)
+            </a>
+          </div>
+
+          <div className="f-md mt-[6vw] flex flex-wrap justify-between gap-4 text-[clamp(12px,0.86vw,16px)] uppercase text-[var(--mute)] border-t border-[var(--line)] pt-6">
+            <span>&copy; {new Date().getFullYear()} Mohd. Misfar</span>
+            <span>Video Editor &bull; Colorist &bull; Graphic Designer</span>
+            <span>Kerala, India</span>
+          </div>
+        </footer>
+      </div>
+
+      {/* Lightbox Modal for Visual Archive */}
+      {selectedDesign && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/92 p-4 sm:p-8 backdrop-blur-md"
+          onClick={() => setSelectedDesign(null)}
+        >
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={() => setSelectedDesign(null)}
+            aria-label="Close modal"
+            className="absolute top-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-white hover:text-black"
+          >
+            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+          </button>
+
+          {/* Previous button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
+              setSelectedDesign(
+                GRAPHIC_DESIGNS[(cur - 1 + GRAPHIC_DESIGNS.length) % GRAPHIC_DESIGNS.length]
+              );
+            }}
+            aria-label="Previous artwork"
+            className="absolute left-4 sm:left-8 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-white hover:text-black"
+          >
+            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+          </button>
+
+          {/* Next button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              const cur = GRAPHIC_DESIGNS.findIndex((d) => d.id === selectedDesign.id);
+              setSelectedDesign(
+                GRAPHIC_DESIGNS[(cur + 1) % GRAPHIC_DESIGNS.length]
+              );
+            }}
+            aria-label="Next artwork"
+            className="absolute right-4 sm:right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-sm transition-all hover:bg-white hover:text-black"
+          >
+            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
+          </button>
+
+          {/* Modal Container */}
+          <div
+            className="relative flex flex-col items-center max-h-[90vh] max-w-5xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative aspect-[4/3] w-full max-h-[75vh] overflow-hidden rounded-2xl border border-white/10">
+              <Image
+                src={selectedDesign.src}
+                alt={selectedDesign.title}
+                fill
+                className="object-contain"
+                sizes="90vw"
+                priority
+              />
+            </div>
+            <div className="mt-4 flex w-full items-baseline justify-between px-2 text-left">
+              <div>
+                <h4 className="f-xl text-lg sm:text-2xl text-white">
+                  {selectedDesign.title}
+                </h4>
+                <p className="f-tx text-xs sm:text-sm text-[var(--mute)]">
+                  {selectedDesign.subtitle} &bull; {selectedDesign.tool}
+                </p>
+              </div>
+              <span className="f-md text-xs uppercase tracking-widest text-[var(--mute)]">
+                {selectedDesign.year}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
