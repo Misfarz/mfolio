@@ -13,14 +13,14 @@ export const CLOUDINARY_VIDEOS = {
   hero: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300389/hero2.mov",
 
   // Videos 2, 3, 4: Portrait / Vertical Slots
-  slot2: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791302786/slot333.mov",
-  slot3: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300961/slot_2.mov",
-  slot4: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791305821/jifan.mov",
+  slot2: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1792755524/adidas.mp4",
+  slot3: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1792755883/effort.mp4",
+  slot4: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791303926/slot_4.mov",
 
   // Videos 5, 6, 7: Portrait / Vertical Slots
-  slot5: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910051/slot_00.mov",
-  slot6: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791910063/slot_66.mov",
-  slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791303926/slot_4.mov",
+  slot5: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791302786/slot333.mov",
+  slot6: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791300961/slot_2.mov",
+  slot7: "https://res.cloudinary.com/oc4pkoeu/video/upload/v1791305821/jifan.mov",
 };
 
 export interface GraphicDesignItem {
@@ -205,9 +205,8 @@ function Float({
       const parent = el.parentElement;
       if (!parent) return;
       const r = parent.getBoundingClientRect();
-      el.style.transform = `translate3d(0,${
-        (r.top + r.height / 2 - window.innerHeight / 2) * speed
-      }px,0)`;
+      el.style.transform = `translate3d(0,${(r.top + r.height / 2 - window.innerHeight / 2) * speed
+        }px,0)`;
     };
     const on = () => {
       cancelAnimationFrame(raf);
@@ -441,9 +440,8 @@ export default function Home() {
                 aria-selected={step === i}
                 aria-label={`Step ${i + 1}`}
                 onClick={() => setStep(i)}
-                className={`h-[11px] w-[11px] rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${
-                  step === i ? "bg-white scale-125" : "bg-[#333333] hover:bg-[#666666]"
-                }`}
+                className={`h-[11px] w-[11px] rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${step === i ? "bg-white scale-125" : "bg-[#333333] hover:bg-[#666666]"
+                  }`}
               />
             ))}
           </div>
