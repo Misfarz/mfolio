@@ -248,15 +248,7 @@ export default function AutoplayVideo({
         onPause={() => setIsPlaying(false)}
       />
 
-      {/* Audio Status Indicator (Desktop Hover or Mobile Scroll-Focus) */}
-      {!isMuted && isPlaying && (
-        <div className="pointer-events-none absolute bottom-3 right-3 z-30 flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-black/85 px-3 py-1 text-[11px] font-medium tracking-wide uppercase text-white backdrop-blur-md shadow-lg shadow-black/50 transition-all duration-300">
-          <span className="flex h-2 w-2 items-center justify-center">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
-          </span>
-          <span className="text-emerald-400 font-semibold tracking-wider">Audio On</span>
-        </div>
-      )}
+
 
       {/* Floating Sound Button when Muted */}
       {showSoundButton && isMuted && (
