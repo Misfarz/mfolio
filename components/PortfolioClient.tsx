@@ -103,6 +103,16 @@ function Cursor() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    // Disable completely on mobile and touch devices
+    if (
+      typeof window === "undefined" ||
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(max-width: 768px)").matches ||
+      "ontouchstart" in window
+    ) {
+      return;
+    }
+
     const onMouseMove = (e: MouseEvent) => {
       if (ref.current) {
         ref.current.style.transform = `translate3d(${e.clientX - 10}px, ${e.clientY - 10}px, 0)`;
@@ -122,7 +132,7 @@ function Cursor() {
         opacity: visible ? 1 : 0,
         pointerEvents: "none",
       }}
-      className="fixed left-0 top-0 z-[99999] h-5 w-5 rounded-full bg-white mix-blend-difference will-change-transform transition-opacity duration-150"
+      className="hidden md:block fixed left-0 top-0 z-[99999] h-5 w-5 rounded-full bg-white mix-blend-difference will-change-transform transition-opacity duration-150"
     />
   );
 }
