@@ -9,6 +9,7 @@ interface AutoplayVideoProps {
   loop?: boolean;
   muted?: boolean;
   showSoundButton?: boolean;
+  hoverPlaySound?: boolean;
 }
 
 export default function AutoplayVideo({
@@ -18,12 +19,17 @@ export default function AutoplayVideo({
   loop = true,
   muted = true,
   showSoundButton = true,
+  hoverPlaySound = false,
 }: AutoplayVideoProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isMuted, setIsMuted] = useState(muted);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
+  // For regular autoplay videos (e.g. Hero Reel)
   useEffect(() => {
+    if (hoverPlaySound) return; // Managed by hover events
+
     const video = videoRef.current;
     if (!video) return;
 
@@ -37,9 +43,7 @@ export default function AutoplayVideo({
             const playPromise = video.play();
             if (playPromise !== undefined) {
               playPromise
-                .then(() => {
-                  setIsPlaying(true);
-                })
+                .then(() => setIsPlaying(true))
                 .catch(() => {
                   video.muted = true;
                   video.defaultMuted = true;
@@ -53,17 +57,80 @@ export default function AutoplayVideo({
           }
         });
       },
-      {
-        threshold: 0.15,
-      }
+      { threshold: 0.15 }
     );
 
     observer.observe(video);
+    return () => observer.disconnect();
+  }, [src, isMuted, hoverPlaySound]);
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [src, isMuted]);
+  // Handle Hover: Point cursor -> Play with Audio ON
+  const handleMouseEnter = async () => {
+    if (!hoverPlaySound) return;
+    setIsHovered(true);
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      video.currentTime = 0;
+      video.muted = false;
+      setIsMuted(false);
+      await video.play();
+      setIsPlaying(true);
+    } catch {
+      // If browser blocks unmuted audio before user interaction:
+      // Fallback: play muted until first user interaction
+      try {
+        if (video) {
+          video.muted = true;
+          setIsMuted(true);
+          await video.play();
+          setIsPlaying(true);
+        }
+      } catch {
+        // Silently catch autoplay errors
+      }
+    }
+  };
+
+  // Handle Leave: Take hover away -> Pause, Reset to 0, Mute
+  const handleMouseLeave = () => {
+    if (!hoverPlaySound) return;
+    setIsHovered(false);
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.pause();
+    video.currentTime = 0;
+    video.muted = true;
+    setIsPlaying(false);
+    setIsMuted(true);
+  };
+
+  // Click to toggle play/sound on mobile or direct click
+  const handleContainerClick = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.muted = false;
+      setIsMuted(false);
+      video.play().then(() => setIsPlaying(true)).catch(() => {});
+    } else {
+      if (hoverPlaySound) {
+        video.pause();
+        video.currentTime = 0;
+        video.muted = true;
+        setIsPlaying(false);
+        setIsMuted(true);
+      } else {
+        video.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
 
   const toggleSound = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -77,26 +144,19 @@ export default function AutoplayVideo({
     }
   };
 
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    if (videoRef.current.paused) {
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
-    } else {
-      videoRef.current.pause();
-    }
-  };
-
   if (!src) return null;
 
   return (
     <div
       className={`relative cursor-pointer select-none overflow-hidden ${containerClassName}`}
-      onClick={togglePlay}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleContainerClick}
     >
       <video
         ref={videoRef}
         src={src}
-        autoPlay
+        autoPlay={!hoverPlaySound}
         loop={loop}
         muted={isMuted}
         playsInline
@@ -106,8 +166,24 @@ export default function AutoplayVideo({
         onPause={() => setIsPlaying(false)}
       />
 
-      {/* Floating Minimal Sound Toggle Button */}
-      {showSoundButton && (
+      {/* Hover Sound Indicator for Video Slots */}
+      {hoverPlaySound && (
+        <div
+          className={`pointer-events-none absolute bottom-3 right-3 z-30 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/80 px-2.5 py-1 text-[11px] font-medium tracking-wide uppercase text-white backdrop-blur-md transition-all duration-300 ${
+            isHovered && isPlaying
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-90 translate-y-1"
+          }`}
+        >
+          <span className="flex h-2 w-2 items-center justify-center">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+          </span>
+          <span>Audio On</span>
+        </div>
+      )}
+
+      {/* Floating Sound Toggle Button for non-hover slots (e.g. Hero) */}
+      {!hoverPlaySound && showSoundButton && (
         <button
           type="button"
           onClick={toggleSound}
@@ -127,11 +203,11 @@ export default function AutoplayVideo({
         </button>
       )}
 
-      {/* Play indicator when paused */}
-      {!isPlaying && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white shadow-xl">
-            <svg className="ml-1 h-5 w-5 fill-current" viewBox="0 0 24 24">
+      {/* Subtle Play Prompt when paused and not hovered */}
+      {hoverPlaySound && !isPlaying && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-lg backdrop-blur-sm">
+            <svg className="ml-0.5 h-4 w-4 fill-current text-white/90" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
@@ -140,5 +216,3 @@ export default function AutoplayVideo({
     </div>
   );
 }
-
-

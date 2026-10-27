@@ -49,8 +49,8 @@ body {
   letter-spacing: -0.02em;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  * {
+@media (hover: hover) {
+  *:not(.admin-root):not(.admin-root *) {
     cursor: none !important;
   }
 }
