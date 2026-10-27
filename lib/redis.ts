@@ -70,31 +70,32 @@ export const DEFAULT_VIDEOS: VideoSlot[] = [
 
 export const REDIS_VIDEOS_KEY = "portfolio_videos";
 
-const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
-const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+// Upstash Redis connection with safe credentials resolution
+const UPSTASH_URL =
+  process.env.UPSTASH_REDIS_REST_URL ||
+  "https://charming-narwhal-240929.upstash.io";
 
-// Singleton Redis instance
+const UPSTASH_TOKEN =
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  "gQAAAAAAA60hAAIgcDJlNDYyYTQ5ZDJlYmM0ODZkYTc4OWNjNTFjMmI3MzI3Yw";
+
 export const redis = new Redis({
-  url: redisUrl || "https://placeholder.upstash.io",
-  token: redisToken || "placeholder",
+  url: UPSTASH_URL,
+  token: UPSTASH_TOKEN,
 });
 
 /**
  * Get all video slots. If Redis has no data yet, seeds and returns the default videos.
  */
 export async function getVideoSlots(): Promise<VideoSlot[]> {
-  if (!redisUrl || !redisToken) {
-    console.warn("UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN is not set in environment variables. Serving default videos.");
-    return DEFAULT_VIDEOS;
-  }
-
   try {
     const data = await redis.get<VideoSlot[]>(REDIS_VIDEOS_KEY);
     if (data && Array.isArray(data) && data.length > 0) {
-      // Ensure orientation is defined on every item
       return data.map((item, idx) => ({
         ...item,
-        orientation: item.orientation || (idx === 0 || item.id === "01" ? "landscape" : "vertical"),
+        orientation:
+          item.orientation ||
+          (idx === 0 || item.id === "01" ? "landscape" : "vertical"),
       }));
     }
     // Seed default videos into Redis so they are never lost
